@@ -1,0 +1,7 @@
+<div tabindex="-1" [class.outline-white]="isActive" [class.outline-transparent]="!isActive"
+    class="relative flex flex-col justify-end rounded-xl overflow-hidden outline outline-4 transition-all w-[42rem] aspect-video">
+    <div class="absolute p-8 left-0 top-0 right-0 bottom-0 flex flex-col justify-end radial-gradient rounded-xl">
+        <h5 class="text-2xl">{{title}}</h5>
+    </div>
+    <img src="{{image}}" alt="{{title}}" class="block object-cover w-full h-full rounded-xl" />
+</div>
