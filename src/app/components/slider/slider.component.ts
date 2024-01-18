@@ -36,6 +36,7 @@ export class SliderComponent implements AfterViewInit {
                 break;
             case VK_BACK_SPACE:
                 // Handle mandatory key Back / Return
+                window.close();
                 break;
         }
         // Block the browser from handling the keydown event.
