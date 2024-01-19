@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, ContentChildren, QueryList } from '@angular/core';
 import { CardComponent } from '../card/card.component';
 import { VK_LEFT, VK_RIGHT, VK_UP, VK_DOWN, VK_ENTER, VK_BACK_SPACE } from '../../utilities/constants';
+import { ModalService } from '../../services/modal.service';
 
 @Component({
   selector: 'app-slider',
@@ -13,6 +14,8 @@ export class SliderComponent implements AfterViewInit {
   @ContentChildren(CardComponent) cards: QueryList<CardComponent> | undefined;
   private cardsArray: CardComponent[] = [];
   private activeCardIndex: number = 0;
+
+  constructor(private modalService: ModalService) { }
 
   ngOnInit() {
     document.addEventListener("keydown", (ev) => {
@@ -33,10 +36,11 @@ export class SliderComponent implements AfterViewInit {
                 break;
             case VK_ENTER:
                 // Handle mandatory key Confirm / Select / OK
+                window.close();
                 break;
             case VK_BACK_SPACE:
                 // Handle mandatory key Back / Return
-                window.close();
+                this.modalService.toggleModal();
                 break;
         }
         // Block the browser from handling the keydown event.

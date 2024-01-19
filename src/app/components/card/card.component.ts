@@ -2,6 +2,9 @@ import { Component, ElementRef, Input } from '@angular/core';
 
 @Component({
   selector: 'app-card',
+  host: {
+    class: 'first:ps-overscan last:pe-overscan p-1'
+  },
   standalone: true,
   imports: [],
   templateUrl: './card.component.html',
