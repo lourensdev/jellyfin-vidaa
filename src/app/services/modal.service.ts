@@ -1,15 +1,23 @@
 import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ModalService {
   private openCloseModal = false;
 
-  constructor() { }
+  constructor() {}
 
   toggleModal() {
     this.openCloseModal = !this.openCloseModal;
+  }
+
+  openModal() {
+    this.openCloseModal = true;
+  }
+
+  closeModal() {
+    this.openCloseModal = false;
   }
 
   getModalState() {

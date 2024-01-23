@@ -1,0 +1,19 @@
+/.yarnrc.yml
+/.yarn/
+/.pnp
+/.pnp.*
+/.serverless
+/.serverless_nextjs
+
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# Prettier seems to get confused because it's not HTML Handlebars
+*.ts.hbs
+*.tsx.hbs

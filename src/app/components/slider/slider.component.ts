@@ -1,62 +1,54 @@
-import { AfterViewInit, Component, ContentChildren, QueryList } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ContentChildren,
+  Input,
+  QueryList,
+} from '@angular/core';
 import { CardComponent } from '../card/card.component';
-import { VK_LEFT, VK_RIGHT, VK_UP, VK_DOWN, VK_ENTER, VK_BACK_SPACE } from '../../utilities/constants';
-import { ModalService } from '../../services/modal.service';
+import { Subscription } from 'rxjs';
+import { NavigationService } from '../../services/navigation.service';
 
 @Component({
   selector: 'app-slider',
   standalone: true,
   imports: [],
   templateUrl: './slider.component.html',
-  styleUrl: './slider.component.scss'
+  styleUrl: './slider.component.scss',
 })
 export class SliderComponent implements AfterViewInit {
+  @Input() componentFocused: boolean = false;
   @ContentChildren(CardComponent) cards: QueryList<CardComponent> | undefined;
   private cardsArray: CardComponent[] = [];
   private activeCardIndex: number = 0;
+  leftPressSubscription: Subscription | null = null;
+  rightPressSubscription: Subscription | null = null;
 
-  constructor(private modalService: ModalService) { }
+  constructor(private navigationService: NavigationService) {}
 
   ngOnInit() {
-    document.addEventListener("keydown", (ev) => {
-        switch (ev.keyCode) {
-            case VK_LEFT:
-                this.navigateLeft();
-                // Handle mandatory key ←
-                break;
-            case VK_RIGHT:
-              this.navigateRight();
-                // Handle mandatory key →
-                break;
-            case VK_UP:
-            // Handle mandatory key ↑
-                break;
-            case VK_DOWN:
-            // Handle mandatory key ↓
-                break;
-            case VK_ENTER:
-                // Handle mandatory key Confirm / Select / OK
-                window.close();
-                break;
-            case VK_BACK_SPACE:
-                // Handle mandatory key Back / Return
-                this.modalService.toggleModal();
-                break;
-        }
-        // Block the browser from handling the keydown event.
-        ev.preventDefault();
-    }, false);
+    this.leftPressSubscription =
+      this.navigationService.leftNavigation.subscribe(() =>
+        this.navigateLeft(),
+      );
+    this.rightPressSubscription =
+      this.navigationService.rightNavigation.subscribe(() =>
+        this.navigateRight(),
+      );
   }
 
   private navigateLeft() {
-    if (this.activeCardIndex > 0) {
+    if (this.activeCardIndex > 0 && this.componentFocused) {
       this.cardsArray[this.activeCardIndex].isActive = false;
       this.cardsArray[--this.activeCardIndex].setActive();
     }
   }
 
   private navigateRight() {
-    if (this.activeCardIndex < this.cardsArray.length - 1) {
+    if (
+      this.activeCardIndex < this.cardsArray.length - 1 &&
+      this.componentFocused
+    ) {
       this.cardsArray[this.activeCardIndex].isActive = false;
       this.cardsArray[++this.activeCardIndex].setActive();
     }
@@ -66,7 +58,14 @@ export class SliderComponent implements AfterViewInit {
     if (this.cards) {
       this.cardsArray = this.cards.toArray();
       // Focus the first card
-      Promise.resolve().then(() => this.cardsArray[this.activeCardIndex].setActive());
+      Promise.resolve().then(() =>
+        this.cardsArray[this.activeCardIndex].setActive(),
+      );
     }
+  }
+
+  ngOnDestroy() {
+    this.leftPressSubscription?.unsubscribe();
+    this.rightPressSubscription?.unsubscribe();
   }
 }

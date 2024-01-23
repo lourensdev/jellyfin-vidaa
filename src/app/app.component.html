@@ -1,5 +1,5 @@
 <main class="py-8">
-  <app-slider>
+  <app-slider [componentFocused]="!modalService.getModalState()">
     <app-card title="Shadow Hunter" image="https://picsum.photos/800/440" />
     <app-card title="Super Puppy" image="https://picsum.photos/800/440" />
     <app-card title="Power Sisters" image="https://picsum.photos/800/440" />
@@ -8,7 +8,7 @@
 </main>
 
 @if (modalService.getModalState()) {
-<app-modal />
+<app-modal [componentFocused]="modalService.getModalState()" />
 }
 
 <router-outlet />
