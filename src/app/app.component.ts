@@ -12,7 +12,10 @@ import {
   VK_ENTER,
   VK_BACK_SPACE,
 } from './utilities/constants';
-import { NavigationService } from './services/navigation.service';
+import {
+  FocusDirection,
+  NavigationService,
+} from './services/navigation.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -24,11 +27,13 @@ import { Subscription } from 'rxjs';
 })
 export class AppComponent implements OnInit {
   title = 'jellyfin-vidaa';
+  upPressSubscription: Subscription | null = null;
+  downPressSubscription: Subscription | null = null;
   backPressSubscription: Subscription | null = null;
 
   constructor(
     public modalService: ModalService,
-    private navigationService: NavigationService,
+    public navigationService: NavigationService,
   ) {}
 
   ngOnInit() {
@@ -36,6 +41,11 @@ export class AppComponent implements OnInit {
       this.navigationService.backNavigation.subscribe(() =>
         this.modalService.openModal(),
       );
+    this.upPressSubscription = this.navigationService.upNavigation.subscribe(
+      () => this.pressUp(),
+    );
+    this.downPressSubscription =
+      this.navigationService.downNavigation.subscribe(() => this.pressDown());
 
     document.addEventListener(
       'keydown',
@@ -71,5 +81,19 @@ export class AppComponent implements OnInit {
       },
       false,
     );
+  }
+
+  pressUp(): void {
+    this.navigationService.moveFocusRow(FocusDirection.UP);
+  }
+
+  pressDown(): void {
+    this.navigationService.moveFocusRow(FocusDirection.DOWN);
+  }
+
+  ngOnDestroy() {
+    this.upPressSubscription?.unsubscribe();
+    this.downPressSubscription?.unsubscribe();
+    this.backPressSubscription?.unsubscribe();
   }
 }

@@ -3,12 +3,12 @@ import { Component, ElementRef, Input } from '@angular/core';
 @Component({
   selector: 'app-card',
   host: {
-    class: 'first:ps-overscan last:pe-overscan p-1'
+    class: 'first:ps-overscan last:pe-overscan p-1',
   },
   standalone: true,
   imports: [],
   templateUrl: './card.component.html',
-  styleUrl: './card.component.scss'
+  styleUrl: './card.component.scss',
 })
 export class CardComponent {
   @Input() title: string = '';
@@ -19,6 +19,14 @@ export class CardComponent {
 
   setActive() {
     this.isActive = true;
-    this.elementRef.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+    this.elementRef.nativeElement.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
+      inline: 'center',
+    });
+  }
+
+  setInactive() {
+    this.isActive = false;
   }
 }

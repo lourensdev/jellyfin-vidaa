@@ -58,9 +58,13 @@ export class SliderComponent implements AfterViewInit {
     if (this.cards) {
       this.cardsArray = this.cards.toArray();
       // Focus the first card
-      Promise.resolve().then(() =>
-        this.cardsArray[this.activeCardIndex].setActive(),
-      );
+      Promise.resolve().then(() => {
+        if (this.componentFocused) {
+          this.cardsArray[this.activeCardIndex].setActive();
+        } else {
+          this.cardsArray.forEach(card => card.setInactive());
+        }
+      });
     }
   }
 

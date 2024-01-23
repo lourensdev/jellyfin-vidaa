@@ -1,10 +1,27 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 
+interface FocusPosition {
+  colIndex: number;
+  rowIndex: number;
+}
+
+export enum FocusDirection {
+  UP = 'up',
+  RIGHT = 'right',
+  DOWN = 'down',
+  LEFT = 'left',
+}
+
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class NavigationService {
+  private focusPositions: string[][] = [['slider-01', 'slider-02']];
+  private activeFocusPosition: FocusPosition = {
+    colIndex: 0,
+    rowIndex: 0,
+  };
 
   // Directions
   private upNavigationEvent = new Subject<void>();
@@ -36,6 +53,22 @@ export class NavigationService {
     this.downNavigationEvent.next();
   }
 
+  getFocusPosition(id: string): FocusPosition | undefined {
+    // Add your implementation here
+    let focusPosition: FocusPosition | undefined;
+    this.focusPositions.forEach((col, colIndex) => {
+      col.forEach((row, rowIndex) => {
+        if (row === id) {
+          focusPosition = {
+            colIndex,
+            rowIndex,
+          };
+        }
+      });
+    });
+    return focusPosition;
+  }
+
   pressLeft(): void {
     this.leftNavigationEvent.next();
   }
@@ -46,5 +79,26 @@ export class NavigationService {
 
   pressBack(): void {
     this.backNavigationEvent.next();
+  }
+
+  trackFocusPosition(id: string): boolean {
+    const focusPosition = this.getFocusPosition(id);
+    if (focusPosition) {
+      return (
+        this.activeFocusPosition.colIndex === focusPosition.colIndex &&
+        this.activeFocusPosition.rowIndex === focusPosition.rowIndex
+      );
+    }
+    return false;
+  }
+
+  moveFocusRow(direction: FocusDirection.UP | FocusDirection.DOWN): void {
+    const nextRowIndex =
+      direction === FocusDirection.UP
+        ? this.activeFocusPosition.rowIndex - 1
+        : this.activeFocusPosition.rowIndex + 1;
+    if (this.focusPositions[0][nextRowIndex]) {
+      this.activeFocusPosition.rowIndex = nextRowIndex;
+    }
   }
 }
