@@ -4,6 +4,7 @@ import {
   ContentChildren,
   Input,
   QueryList,
+  SimpleChanges,
 } from '@angular/core';
 import { CardComponent } from '../card/card.component';
 import { Subscription } from 'rxjs';
@@ -26,6 +27,19 @@ export class SliderComponent implements AfterViewInit {
 
   constructor(private navigationService: NavigationService) {}
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['componentFocused']) {
+      this.cardsArray.forEach(card => {
+        card.setFocusable(this.componentFocused);
+        card.isActive && card.setActive();
+      });
+      // If no cards are active set the 1st one as active
+      if (this.cardsArray.filter(card => card.isActive).length === 0) {
+        this.cardsArray[0]?.setActive();
+      }
+    }
+  }
+
   ngOnInit() {
     this.leftPressSubscription =
       this.navigationService.leftNavigation.subscribe(() =>
@@ -38,7 +52,11 @@ export class SliderComponent implements AfterViewInit {
   }
 
   private navigateLeft() {
-    if (this.activeCardIndex > 0 && this.componentFocused) {
+    if (
+      this.activeCardIndex > 0 &&
+      this.componentFocused &&
+      !this.navigationService.getOnExitModal()
+    ) {
       this.cardsArray[this.activeCardIndex].isActive = false;
       this.cardsArray[--this.activeCardIndex].setActive();
     }
@@ -47,7 +65,8 @@ export class SliderComponent implements AfterViewInit {
   private navigateRight() {
     if (
       this.activeCardIndex < this.cardsArray.length - 1 &&
-      this.componentFocused
+      this.componentFocused &&
+      !this.navigationService.getOnExitModal()
     ) {
       this.cardsArray[this.activeCardIndex].isActive = false;
       this.cardsArray[++this.activeCardIndex].setActive();
@@ -61,6 +80,9 @@ export class SliderComponent implements AfterViewInit {
       Promise.resolve().then(() => {
         if (this.componentFocused) {
           this.cardsArray[this.activeCardIndex].setActive();
+          this.cardsArray.forEach(card =>
+            card.setFocusable(this.componentFocused),
+          );
         } else {
           this.cardsArray.forEach(card => card.setInactive());
         }

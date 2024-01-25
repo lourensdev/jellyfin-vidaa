@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, ElementRef, Input } from '@angular/core';
 
 @Component({
@@ -6,7 +7,7 @@ import { Component, ElementRef, Input } from '@angular/core';
     class: 'first:ps-overscan last:pe-overscan p-1',
   },
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './card.component.html',
   styleUrl: './card.component.scss',
 })
@@ -14,8 +15,13 @@ export class CardComponent {
   @Input() title: string = '';
   @Input() image: string = '';
   @Input() isActive: boolean | undefined;
+  @Input() isFocused: boolean | undefined;
 
   constructor(private elementRef: ElementRef) {}
+
+  setFocusable(state: boolean) {
+    this.isFocused = state;
+  }
 
   setActive() {
     this.isActive = true;

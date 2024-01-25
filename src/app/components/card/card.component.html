@@ -1,5 +1,5 @@
-<div tabindex="-1" [class.ring-white]="isActive" [class.ring-transparent]="!isActive"
-    class="relative flex flex-col justify-end rounded-xl ring-4 transition-shadow w-[42rem] aspect-video box-border">
+<div tabindex="-1" [ngClass]="{'ring-white' : isActive && isFocused }"
+    class="relative flex flex-col justify-end rounded-xl ring-4 ring-transparent transition-shadow w-[42rem] aspect-video box-border">
     <div class="absolute p-8 left-0 top-0 right-0 bottom-0 flex flex-col justify-end radial-gradient rounded-xl">
         <h5 class="text-4xl">{{title}}</h5>
     </div>

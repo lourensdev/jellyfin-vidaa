@@ -22,6 +22,7 @@ export class NavigationService {
     colIndex: 0,
     rowIndex: 0,
   };
+  private isOnExitModal: boolean = false;
 
   // Directions
   private upNavigationEvent = new Subject<void>();
@@ -100,5 +101,13 @@ export class NavigationService {
     if (this.focusPositions[0][nextRowIndex]) {
       this.activeFocusPosition.rowIndex = nextRowIndex;
     }
+  }
+
+  setOnExitModal(state: boolean): void {
+    this.isOnExitModal = state;
+  }
+
+  getOnExitModal(): boolean {
+    return this.isOnExitModal;
   }
 }
