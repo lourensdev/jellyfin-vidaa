@@ -16,6 +16,9 @@ export class CardComponent {
   @Input() image: string = '';
   @Input() isActive: boolean | undefined;
   @Input() isFocused: boolean | undefined;
+  @Input() isLandscape: boolean | undefined;
+  @Input() isLarge: boolean | undefined;
+  @Input() hideTitle: boolean | undefined;
 
   constructor(private elementRef: ElementRef) {}
 
