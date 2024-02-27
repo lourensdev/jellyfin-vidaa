@@ -1,33 +1,26 @@
-/* To learn more about this file see: https://angular.io/config/tsconfig. */
 {
-  "compileOnSave": false,
   "compilerOptions": {
-    "outDir": "./dist/out-tsc",
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "noImplicitOverride": true,
-    "noPropertyAccessFromIndexSignature": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
     "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
     "esModuleInterop": true,
-    "sourceMap": true,
-    "declaration": false,
-    "experimentalDecorators": true,
-    "moduleResolution": "node",
-    "importHelpers": true,
-    "target": "ES2022",
-    "module": "ES2022",
-    "useDefineForClassFields": false,
-    "lib": [
-      "ES2022",
-      "dom"
-    ]
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./*"]
+    }
   },
-  "angularCompilerOptions": {
-    "enableI18nLegacyMessageIdFormat": false,
-    "strictInjectionParameters": true,
-    "strictInputAccessModifiers": true,
-    "strictTemplates": true
-  }
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
 }

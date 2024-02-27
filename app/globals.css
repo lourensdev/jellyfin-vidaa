@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import 'assets/font/font.css';
+
+:root {
+  --background: #1A1C1E;
+    --text: #FFFFFF;
+}
+
+body {
+  font-family: 'Inter', 'MoBe Sans';
+  color: var(--text);
+  background-color: var(--background);
+  margin: 54px 0;
+}
