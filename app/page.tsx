@@ -17,6 +17,9 @@ import {
   VK_BACK_SPACE,
 } from '@/src/utilities/constants';
 import { useEffect } from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay } from 'swiper/modules';
+import 'swiper/css';
 
 export default function Home() {
   const {
@@ -119,6 +122,50 @@ export default function Home() {
           image="https://picsum.photos/800/440"
         />
       </SliderComponent>
+      <div className="max-w-full">
+        <Swiper
+          spaceBetween={0}
+          slidesPerView={2}
+          autoplay={true}
+          modules={[Autoplay]}
+          loop={true}
+          onSlideChange={() => console.log('slide change')}
+          onSwiper={swiper => console.log(swiper)}
+        >
+          <SwiperSlide>
+            <CardComponent
+              isLandscape={true}
+              isLarge={true}
+              title="Shadow Hunter"
+              image="https://picsum.photos/800/440"
+            />
+          </SwiperSlide>
+          <SwiperSlide>
+            <CardComponent
+              isLandscape={true}
+              isLarge={true}
+              title="Super Puppy"
+              image="https://picsum.photos/800/440"
+            />
+          </SwiperSlide>
+          <SwiperSlide>
+            <CardComponent
+              isLandscape={true}
+              isLarge={true}
+              title="Power Sisters"
+              image="https://picsum.photos/800/440"
+            />
+          </SwiperSlide>
+          <SwiperSlide>
+            <CardComponent
+              isLandscape={true}
+              isLarge={true}
+              title="Earth"
+              image="https://picsum.photos/800/440"
+            />
+          </SwiperSlide>
+        </Swiper>
+      </div>
       <SliderComponent componentFocused={trackFocusPosition('slider-02')}>
         <CardComponent
           title="Shadow Hunter"
