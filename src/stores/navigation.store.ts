@@ -52,6 +52,10 @@ export const useNavigationStore = create<NavigationState>((set, get) => ({
 
   triggerPress: (property: any) => {
     set(state => ({ ...state, [property]: true }));
+    /*
+      Reset the property after a timeout so the press event
+      is only triggered on true state. Simulates a keyup event.
+    */
     setTimeout(() => {
       set(state => ({ ...state, [property]: false }));
     }, RESET_TIMEOUT);
