@@ -6,7 +6,8 @@
 
 :root {
   --background: #1A1C1E;
-    --text: #FFFFFF;
+  --text: #FFFFFF;
+  --gray: #444746;
 }
 
 body {

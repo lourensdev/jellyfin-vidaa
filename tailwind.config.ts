@@ -15,8 +15,14 @@ const config: Config = {
         'radial-gradient':
           'linear-gradient(208deg, transparent 0%, var(--background) 100%)',
       },
+      backgroundColor: {
+        gray: 'var(--gray)',
+      },
       padding: {
         overscan: '96px',
+      },
+      aspectRatio: {
+        poster: '2 / 3',
       },
     },
   },
