@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useFocusable } from '@noriginmedia/norigin-spatial-navigation';
+import { useCallback, useEffect } from 'react';
 
 export interface CardComponentProps {
   title: string;
   image: string;
-  isActive?: boolean;
   isFocused?: boolean;
   isLandscape?: boolean;
   isLarge?: boolean;
@@ -13,22 +13,22 @@ export interface CardComponentProps {
 }
 
 export default function CardComponent(props: CardComponentProps) {
-  const elementRef = useRef<HTMLDivElement>(null);
+  const { ref, focused } = useFocusable();
 
-  // Scroll into view when the card is active
   useEffect(() => {
-    if (!props.isActive) return;
-    elementRef.current?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'center',
-      inline: 'center',
-    });
-  }, [props.isActive]);
+    if (focused) {
+      ref.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+        inline: 'center',
+      });
+    }
+  }, [ref, focused]);
 
   const getWrapperClassNames = (): string => {
     let classNames =
       'relative flex flex-col justify-end ring-4 ring-transparent transition-shadow box-border';
-    classNames += props.isActive && props.isFocused ? ' ring-white' : '';
+    classNames += focused ? ' ring-white' : '';
     classNames += !props.isLandscape ? ' aspect-[1/1.5]' : ' aspect-[16/9]';
     classNames += !props.isLarge
       ? ' w-[15rem] rounded'
@@ -44,7 +44,7 @@ export default function CardComponent(props: CardComponentProps) {
 
   const getDefaultTitleClassNames = (): string => {
     let classNames = 'py-4 text-center opacity-0 transition-opacity';
-    classNames += props.isActive && props.isFocused ? ' opacity-100' : '';
+    classNames += focused ? ' opacity-100' : '';
     return classNames;
   };
 
@@ -56,7 +56,7 @@ export default function CardComponent(props: CardComponentProps) {
   };
 
   return (
-    <div ref={elementRef} className="first:ps-overscan last:pe-overscan p-1">
+    <div ref={ref} className="first:ps-overscan last:pe-overscan p-1">
       <div className={getWrapperClassNames()}>
         <div className={getTitleClassNames()}>
           {props.isLarge && !props.hideTitle && (

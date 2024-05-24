@@ -1,54 +1,35 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { CardComponentProps } from '../card';
-import { useNavigationStore } from '../../stores/navigation.store';
-import React from 'react';
+import React, { useEffect } from 'react';
+import {
+  FocusContext,
+  useFocusable,
+} from '@noriginmedia/norigin-spatial-navigation';
 
 interface SliderComponentProps {
-  children: React.ReactElement<CardComponentProps>[];
-  componentFocused: boolean;
+  children: React.ReactElement<any>[];
+  isFocused?: boolean;
 }
 
 export const SliderComponent: React.FC<SliderComponentProps> = ({
   children,
-  componentFocused,
+  isFocused,
 }) => {
-  const [activeCardIndex, setActiveCardIndex] = useState(0);
-  const { isOnExitModal, pressLeftEvent, pressRightEvent } =
-    useNavigationStore();
+  const { ref, focusKey, focusSelf } = useFocusable();
 
   useEffect(() => {
-    const navigateLeft = () => {
-      if (activeCardIndex > 0 && componentFocused && !isOnExitModal) {
-        setActiveCardIndex(activeCardIndex - 1);
-      }
-    };
-    pressLeftEvent && navigateLeft();
-  }, [pressLeftEvent, componentFocused, isOnExitModal]);
-
-  useEffect(() => {
-    const navigateRight = () => {
-      if (
-        activeCardIndex < children.length - 1 &&
-        componentFocused &&
-        !isOnExitModal
-      ) {
-        setActiveCardIndex(activeCardIndex + 1);
-      }
-    };
-    pressRightEvent && navigateRight();
-  }, [pressRightEvent, componentFocused, isOnExitModal]);
+    if (isFocused) {
+      focusSelf();
+    }
+  }, [focusSelf, isFocused]);
 
   return (
-    <div className="flex gap-8 overflow-x-hidden max-w-full">
-      {React.Children.map(children, (child, index) => {
-        const isActive = index === activeCardIndex && componentFocused;
-        return React.cloneElement(child, {
-          isActive,
-          isFocused: componentFocused,
-        });
-      })}
-    </div>
+    <FocusContext.Provider value={focusKey}>
+      <div ref={ref} className="flex gap-8 overflow-x-hidden max-w-full">
+        {React.Children.map(children, child => {
+          return React.cloneElement(child);
+        })}
+      </div>
+    </FocusContext.Provider>
   );
 };
