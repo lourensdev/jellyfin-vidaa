@@ -5,8 +5,8 @@ import './globals.scss';
 const roboto = Roboto({ weight: ['300', '400', '700'], subsets: ['cyrillic'] });
 
 export const metadata: Metadata = {
-  title: 'Jellyfin Vidaa OS App',
-  description: 'Jellyfin Vidaa OS App built with NextJS',
+  title: 'Jellyfin',
+  description: 'Vidaa Jellyfin Client',
 };
 
 export default function RootLayout({
