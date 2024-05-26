@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import './globals.css';
+import { Roboto } from 'next/font/google';
+import './globals.scss';
 
-const inter = Inter({ subsets: ['latin'] });
+const roboto = Roboto({ weight: ['300', '400', '700'], subsets: ['cyrillic'] });
 
 export const metadata: Metadata = {
   title: 'Jellyfin Vidaa OS App',
@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className} style={{ margin: 0 }}>
+      <body className={roboto.className} style={{ margin: 0 }}>
         {children}
       </body>
     </html>

@@ -11,7 +11,7 @@
 }
 
 body {
-  font-family: 'Inter', 'MoBe Sans';
+  font-family: 'Roboto';
   color: var(--text);
   background-color: var(--background);
   margin: 54px 0;
@@ -30,5 +30,22 @@ body {
   .bg-radial-gradient {
     background-image: linear-gradient(208deg, transparent 0%, var(--background) 100%);
   }
+}
+
+.loader {
+  width: 24px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(farthest-side, var(--background) 94%, #0000) top/3px 3px no-repeat, conic-gradient(#0000 30%, var(--background));
+  -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 3px), #000 0);
+  animation: l13 1s infinite linear;
+
+  &.light {
+    background: radial-gradient(farthest-side, #fff 94%, #0000) top/3px 3px no-repeat, conic-gradient(#0000 30%, #fff);
+  }
+}
+
+@keyframes l13{ 
+  100%{transform: rotate(1turn)}
 }
 

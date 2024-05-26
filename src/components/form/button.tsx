@@ -1,5 +1,12 @@
 'use client';
 
+import {
+  KeyPressDetails,
+  useFocusable,
+} from '@noriginmedia/norigin-spatial-navigation';
+import { useEffect } from 'react';
+import Loader, { LoaderStyle } from '../loader';
+
 export enum ButtonType {
   Primary = 'primary',
   Secondary = 'secondary',
@@ -8,18 +15,24 @@ export enum ButtonType {
 export interface ButtonProps {
   label: string;
   type: ButtonType;
+  loading?: boolean;
   disabled?: boolean;
   noMinWidth?: boolean;
-  onClick: () => void;
+  onEnterPress: (props: object, details: KeyPressDetails) => void;
 }
 
 export default function Button({
   label,
   type,
+  loading,
   disabled,
   noMinWidth,
-  onClick,
+  onEnterPress,
 }: ButtonProps) {
+  const { ref, focused } = useFocusable({
+    onEnterPress,
+  });
+
   const buttonTypeClasses = (): string => {
     switch (type) {
       case ButtonType.Primary:
@@ -28,14 +41,25 @@ export default function Button({
         return 'bg-gray text-white';
     }
   };
+
   return (
     <button
-      className={`rounded-3xl py-3 px-5 ${buttonTypeClasses()} ${
+      ref={ref}
+      className={`flex justify-center rounded-3xl py-3 px-5 ${buttonTypeClasses()} ${
         noMinWidth ? '' : 'min-w-[200px]'
-      } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
-      onClick={onClick}
+      } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
+      outline outline-offset-4 outline-transparent
+      ${focused ? 'outline-white' : ''}`}
     >
-      {label}
+      {loading ? (
+        <Loader
+          mode={
+            type === ButtonType.Primary ? LoaderStyle.Dark : LoaderStyle.Light
+          }
+        />
+      ) : (
+        label
+      )}
     </button>
   );
 }
