@@ -57,8 +57,7 @@ export default function Button({
       className={`flex justify-center rounded-3xl ${buttonSizeClasses()} ${buttonTypeClasses()} ${
         noMinWidth ? '' : 'min-w-[200px]'
       } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
-      ring-transparent ring-offset-[#000b25] ring-offset-4
-    ${focused ? 'ring-4 ring-white ring-offset-[#000b25]' : ''}`}
+    ${focused ? `ring-4 ring-white ring-offset-4 ring-offset-[#192F3C]` : ''}`}
     >
       {loading ? (
         <Loader
