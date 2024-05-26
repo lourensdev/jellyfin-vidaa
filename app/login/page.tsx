@@ -37,7 +37,7 @@ export default function LoginPage() {
   return (
     <main className="relative flex flex-col gap-10 py-8 items-center justify-center w-screen h-screen">
       <div className="fixed flex gap-2.5 z-0 w-screen h-screen flex-wrap opacity-20 bg-jellyfin-gradient"></div>
-      <div className="px-5 relative z-10 flex flex-col items-center gap-4 w-full max-w-xl">
+      <div className="px-5 relative z-10 flex flex-col items-center gap-4 w-full max-w-2xl">
         <img
           src="assets/banner-dark.svg"
           width={300}
@@ -47,22 +47,26 @@ export default function LoginPage() {
         />
         <FocusContext.Provider value={focusKey}>
           <div
-            className="px-5 relative z-10 flex flex-col items-center w-full gap-6 mt-10"
+            className="px-5 relative z-10 flex flex-col items-center w-full gap-6 mt-8"
             ref={ref}
           >
             <TextInput
               placeholder="Username"
+              large={true}
               onChange={e => setUsername(e)}
               disabled={submitting}
             />
             <TextInput
               placeholder="Password"
+              large={true}
+              type={'password'}
               onChange={e => setPassword(e)}
               disabled={submitting}
             />
             <Button
-              label="Submit"
+              label="Connect"
               type={ButtonType.Primary}
+              large={true}
               onEnterPress={submit}
               loading={submitting}
               disabled={submitting}

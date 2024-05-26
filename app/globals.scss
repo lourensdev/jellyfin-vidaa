@@ -8,6 +8,8 @@
   --background: #1A1C1E;
   --text: #FFFFFF;
   --gray: #444746;
+  --jellyfin-gradient-start: #AA5CC3;
+  --jellyfin-gradient-end: #00A4DC;
 }
 
 body {
@@ -20,6 +22,9 @@ body {
 @layer utilities {
   .bg-jellyfin-gradient {
     background-image: linear-gradient(to right top, #000b25, #0a2544, #133f65, #185b88, #1779ac, #1c83be, #238ed0, #2e98e3, #518de4, #727fdf, #906fd4, #aa5cc3);
+  }
+  .bg-jellyfin-button-gradient {
+    background-image: linear-gradient(to right top, var(--jellyfin-gradient-start), var(--jellyfin-gradient-end));
   }
   .bg-gradient-radial {
     background-image: radial-gradient(var(--tw-gradient-stops));
