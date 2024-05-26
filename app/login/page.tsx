@@ -2,6 +2,8 @@
 
 import Button, { ButtonType } from '@/src/components/form/button';
 import TextInput from '@/src/components/form/input';
+import ModalComponent from '@/src/components/modal';
+import { useModal } from '@/src/hooks/useModal';
 import {
   FocusContext,
   init,
@@ -16,15 +18,17 @@ init({
 });
 
 export default function LoginPage() {
+  const { isOpen } = useModal();
   const router = useRouter();
   const { ref, focusKey, focusSelf } = useFocusable();
+
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [submitting, setSubmitting] = useState<boolean>(false);
 
   useEffect(() => {
-    focusSelf();
-  }, [focusSelf]);
+    !isOpen && focusSelf();
+  }, [isOpen, focusSelf]);
 
   const submit = () => {
     setSubmitting(true);
@@ -74,6 +78,7 @@ export default function LoginPage() {
           </div>
         </FocusContext.Provider>
       </div>
+      {isOpen && <ModalComponent />}
     </main>
   );
 }

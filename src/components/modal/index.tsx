@@ -23,7 +23,7 @@ export default function ModalComponent() {
     <FocusContext.Provider value={focusKey}>
       <div
         ref={ref}
-        className="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center backdrop-blur-md"
+        className="fixed top-0 left-0 right-0 bottom-0 z-50 flex justify-center items-center backdrop-blur-md"
       >
         <div className="bg-white p-14 text-black rounded-lg text-2xl">
           <h2 className="text-4xl mb-4">Exit</h2>

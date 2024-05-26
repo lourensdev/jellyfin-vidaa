@@ -3,6 +3,7 @@
 import CardComponent from '@/src/components/card';
 import ModalComponent from '@/src/components/modal';
 import { SliderComponent } from '@/src/components/slider';
+import { useModal } from '@/src/hooks/useModal';
 import { useModalStore } from '@/src/stores/modal.store';
 import { VK_BACK_SPACE } from '@/src/utilities/constants';
 import { init } from '@noriginmedia/norigin-spatial-navigation';
@@ -14,28 +15,7 @@ init({
 });
 
 export default function Home() {
-  const { isOpen, closeModal, openModal } = useModalStore();
-
-  useEffect(() => {
-    document.addEventListener(
-      'keydown',
-      ev => {
-        switch (ev.keyCode) {
-          case VK_BACK_SPACE:
-            // Handle mandatory key Back / Return
-            isOpen ? closeModal() : openModal();
-            break;
-        }
-        // Block the browser from handling the keydown event.
-        ev.preventDefault();
-      },
-      false,
-    );
-
-    return () => {
-      document.removeEventListener('keydown', () => {});
-    };
-  }, []);
+  const { isOpen } = useModal();
 
   return (
     <main className="flex flex-col gap-10 py-8">
