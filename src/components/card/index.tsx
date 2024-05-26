@@ -50,7 +50,7 @@ export default function CardComponent(props: CardComponentProps) {
 
   const getTitleClassNames = (): string => {
     let classNames =
-      'absolute p-8 left-0 top-0 right-0 bottom-0 flex flex-col justify-end radial-gradient';
+      'absolute p-8 left-0 top-0 right-0 bottom-0 flex flex-col justify-end bg-radial-gradient';
     classNames += props.isLarge ? ' rounded-xl' : ' rounded';
     return classNames;
   };

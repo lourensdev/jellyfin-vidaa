@@ -16,3 +16,19 @@ body {
   background-color: var(--background);
   margin: 54px 0;
 }
+
+@layer utilities {
+  .bg-jellyfin-gradient {
+    background-image: linear-gradient(to right top, #000b25, #0a2544, #133f65, #185b88, #1779ac, #1c83be, #238ed0, #2e98e3, #518de4, #727fdf, #906fd4, #aa5cc3);
+  }
+  .bg-gradient-radial {
+    background-image: radial-gradient(var(--tw-gradient-stops));
+  }
+  .bg-gradient-conic {
+    background-image: conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops));
+  }
+  .bg-radial-gradient {
+    background-image: linear-gradient(208deg, transparent 0%, var(--background) 100%);
+  }
+}
+
