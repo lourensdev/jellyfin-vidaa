@@ -39,17 +39,17 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="relative flex flex-col gap-10 py-8 items-center justify-center w-screen h-screen">
-      <div className="fixed flex gap-2.5 z-0 w-screen h-screen flex-wrap opacity-20 bg-jellyfin-gradient"></div>
-      <div className="px-5 relative z-10 flex flex-col items-center gap-4 w-full max-w-2xl">
-        <img
-          src="assets/banner-dark.svg"
-          width={300}
-          height={100}
-          alt="Jellyfin React"
-          loading="lazy"
-        />
-        <FocusContext.Provider value={focusKey}>
+    <FocusContext.Provider value={focusKey}>
+      <main className="relative flex flex-col gap-10 py-8 items-center justify-center w-screen h-screen">
+        <div className="fixed flex gap-2.5 z-0 w-screen h-screen flex-wrap opacity-20 bg-jellyfin-gradient"></div>
+        <div className="px-5 relative z-10 flex flex-col items-center gap-4 w-full max-w-2xl">
+          <img
+            src="assets/banner-dark.svg"
+            width={300}
+            height={100}
+            alt="Jellyfin React"
+            loading="lazy"
+          />
           <div
             className="px-5 relative z-10 flex flex-col items-center w-full gap-6 mt-8"
             ref={ref}
@@ -76,9 +76,9 @@ export default function LoginPage() {
               disabled={submitting}
             />
           </div>
-        </FocusContext.Provider>
-      </div>
-      {isOpen && <ModalComponent />}
-    </main>
+        </div>
+        {isOpen && <ModalComponent />}
+      </main>
+    </FocusContext.Provider>
   );
 }
