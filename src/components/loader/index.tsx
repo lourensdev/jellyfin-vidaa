@@ -3,6 +3,7 @@
 export enum LoaderStyle {
   Light,
   Dark,
+  Blue,
 }
 
 interface LoaderProps {
@@ -11,9 +12,20 @@ interface LoaderProps {
 }
 
 export default function Loader({ mode, size }: LoaderProps) {
+  const getStyleClass = (mode: LoaderStyle): string => {
+    switch (mode) {
+      case LoaderStyle.Light:
+        return 'light';
+      case LoaderStyle.Dark:
+        return 'dark';
+      case LoaderStyle.Blue:
+        return 'blue';
+    }
+  };
+
   return (
     <div
-      className={`loader ${mode === LoaderStyle.Light ? 'light' : 'dark'}`}
+      className={`loader ${getStyleClass(mode)}`}
       style={size ? { width: `${size}px` } : {}}
     ></div>
   );

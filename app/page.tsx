@@ -1,6 +1,8 @@
 'use client';
 
 import Loader, { LoaderStyle } from '@/src/components/loader';
+import { USER_DATA } from '@/src/constants/storage.keys';
+import { Storage } from '@/src/utilities/storage';
 import { animated, useSpring, easings } from '@react-spring/web';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -19,11 +21,15 @@ export default function SplashPage() {
       scale: 1,
     },
     onResolve: () => {
+      setShowSpinner(true);
       setTimeout(() => {
-        setShowSpinner(true);
-        setTimeout(() => {
+        const userData = Storage.get(USER_DATA);
+        if (userData) {
+          router.push('/dashboard');
+        } else {
           router.push('/login');
-        }, 2000);
+        }
+        setShowSpinner(false);
       }, 500);
     },
     config: {
@@ -47,7 +53,7 @@ export default function SplashPage() {
         />
         {showSpinner && (
           <div className="absolute top-full right-2/4 translate-x-2/4">
-            <Loader mode={LoaderStyle.Light} size={40} />
+            <Loader mode={LoaderStyle.Blue} size={40} />
           </div>
         )}
       </div>

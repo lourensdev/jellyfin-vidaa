@@ -48,6 +48,10 @@ body {
   &.light {
     background: radial-gradient(farthest-side, #fff 94%, #0000) top/3px 3px no-repeat, conic-gradient(#0000 30%, #fff);
   }
+
+  &.blue {
+    background: radial-gradient(farthest-side, #37A2DB 94%, #0000) top/3px 3px no-repeat, conic-gradient(#0000 30%, #37A2DB);
+  }
 }
 
 @keyframes l13{ 

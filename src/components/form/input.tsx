@@ -47,7 +47,7 @@ export default function TextInput({
       type={type || 'text'}
       placeholder={placeholder}
       disabled={disabled}
-      value={value}
+      defaultValue={value}
       onKeyUp={e => {
         onChange?.(e.currentTarget.value);
       }}
