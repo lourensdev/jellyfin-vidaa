@@ -119,7 +119,7 @@ export default function Dashboard() {
                   key={media.id}
                   title={media.label}
                   image={media.image}
-                  hideTitle={true}
+                  year={media.year}
                   hideGradientOverlay={true}
                   progress={media.progress}
                 />
@@ -136,7 +136,7 @@ export default function Dashboard() {
                   key={movie.id}
                   title={movie.label}
                   image={movie.image}
-                  hideTitle={true}
+                  year={movie.year}
                   hideGradientOverlay={true}
                 />
               ))}
@@ -152,7 +152,7 @@ export default function Dashboard() {
                   key={show.id}
                   title={show.label}
                   image={show.image}
-                  hideTitle={true}
+                  year={show.year}
                   hideGradientOverlay={true}
                 />
               ))}

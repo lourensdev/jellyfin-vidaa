@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 export interface CardComponentProps {
   title: string;
   image: string;
+  year?: number | null;
   isFocused?: boolean;
   isLandscape?: boolean;
   isLarge?: boolean;
@@ -55,7 +56,7 @@ export default function CardComponent(props: CardComponentProps) {
   };
 
   const getDefaultTitleClassNames = (): string => {
-    let classNames = 'py-4 text-center opacity-0 transition-opacity';
+    let classNames = 'pt-4 text-center opacity-0 transition-opacity';
     classNames += focused ? ' opacity-100' : '';
     return classNames;
   };
@@ -73,7 +74,14 @@ export default function CardComponent(props: CardComponentProps) {
       <div className={getWrapperClassNames()}>
         <div className={getTitleClassNames()}>
           {props.isLarge && !props.hideTitle && (
-            <h5 className="text-4xl">{props.title}</h5>
+            <h5 className="text-4xl">
+              {props.title}
+              {props.year && (
+                <span className="text-3xl opacity-50 inline-block pl-2">
+                  {props.year}
+                </span>
+              )}
+            </h5>
           )}
         </div>
         <img
@@ -95,7 +103,14 @@ export default function CardComponent(props: CardComponentProps) {
       )}
       {!props.isLarge && !props.hideTitle && (
         <div className={getDefaultTitleClassNames()}>
-          <h5 className="text-lg">{props.title}</h5>
+          <h5 className="text-lg">
+            {props.title}
+            {props.year && (
+              <span className="text-md opacity-50 inline-block pl-2">
+                ({props.year})
+              </span>
+            )}
+          </h5>
         </div>
       )}
     </div>
