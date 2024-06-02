@@ -12,6 +12,8 @@ export interface CardComponentProps {
   isLandscape?: boolean;
   isLarge?: boolean;
   hideTitle?: boolean;
+  hideGradientOverlay?: boolean;
+  progress?: number;
 }
 
 export default function CardComponent(props: CardComponentProps) {
@@ -27,6 +29,8 @@ export default function CardComponent(props: CardComponentProps) {
         inline: 'center',
       });
       closeNavbar();
+
+      // Store a reference to the last focused element
       setTimeout(() => {
         setLastFocused(focusKey);
       }, 500);
@@ -57,8 +61,9 @@ export default function CardComponent(props: CardComponentProps) {
   };
 
   const getTitleClassNames = (): string => {
-    let classNames =
-      'absolute p-8 left-0 top-0 right-0 bottom-0 flex flex-col justify-end bg-radial-gradient';
+    let classNames = `absolute p-8 left-0 top-0 right-0 bottom-0 flex flex-col justify-end ${
+      props.hideGradientOverlay ? '' : 'bg-radial-gradient'
+    }`;
     classNames += props.isLarge ? ' rounded-xl' : ' rounded';
     return classNames;
   };
@@ -77,6 +82,17 @@ export default function CardComponent(props: CardComponentProps) {
           className={getImageClassNames()}
         />
       </div>
+      {props.progress && (
+        <div className="mt-4 h-2 rounded overflow-hidden w-full bg-black opacity-75">
+          <div
+            className="h-full rounded"
+            style={{
+              backgroundColor: '#37A2DB',
+              width: `${props.progress}%`,
+            }}
+          ></div>
+        </div>
+      )}
       {!props.isLarge && !props.hideTitle && (
         <div className={getDefaultTitleClassNames()}>
           <h5 className="text-lg">{props.title}</h5>

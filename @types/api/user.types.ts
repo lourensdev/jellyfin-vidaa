@@ -5,3 +5,12 @@ export type UsersAuthByNameBody =
 
 export type UsersAuthByNameResponse =
   paths['/Users/AuthenticateByName']['post']['responses']['200']['content']['application/json'];
+
+export type UsersViewsResponse =
+  paths['/UserViews']['get']['responses']['200']['content']['application/json'];
+
+export type UsersResumeItemsResponse =
+  paths['/UserItems/Resume']['get']['responses']['200']['content']['application/json'];
+
+export type UsersLatestItemsResponse =
+  paths['/Items/Latest']['get']['responses']['200']['content']['application/json'];

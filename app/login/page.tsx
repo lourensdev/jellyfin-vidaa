@@ -14,7 +14,15 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { AuthenticateByName } from '../api/users/authenticateByName';
 import { Storage } from '@/src/utilities/storage';
-import { DEVICE_ID, USER_DATA } from '@/src/constants/storage.keys';
+import {
+  DEVICE_ID,
+  SERVER_URL,
+  USER_DATA,
+  USER_ID,
+  USER_TOKEN,
+} from '@/src/constants/storage.keys';
+import { setCookie, getCookie } from 'cookies-next';
+import { UsersAuthByNameResponse } from '@/@types/api/user.types';
 
 init({
   debug: false,
@@ -22,39 +30,37 @@ init({
 });
 
 export default function LoginPage() {
-  const { isOpen } = useModal();
+  const { isModalOpen } = useModal();
   const router = useRouter();
   const { ref, focusKey, focusSelf } = useFocusable();
 
   const [server, setServer] = useState<string>('http://192.168.1.180:8096');
   const [username, setUsername] = useState<string>('lpdev');
   const [password, setPassword] = useState<string>('1234');
-  const [deviceId, setDeviceId] = useState<string>('');
   const [submitting, setSubmitting] = useState<boolean>(false);
 
   useEffect(() => {
-    const deviceId = Storage.get(DEVICE_ID);
-    if (!deviceId) {
+    if (!getCookie(DEVICE_ID)) {
       const id = uuidv4();
-      setDeviceId(id);
-      Storage.set(DEVICE_ID, id);
-    } else {
-      setDeviceId(deviceId);
+      setCookie(DEVICE_ID, id);
     }
   }, []);
 
   useEffect(() => {
-    !isOpen && focusSelf();
-  }, [isOpen, focusSelf]);
+    !isModalOpen && focusSelf();
+  }, [isModalOpen, focusSelf]);
 
   const submit = async () => {
+    setCookie(SERVER_URL, server);
     setSubmitting(true);
-    const data = await AuthenticateByName(server, username, password, deviceId);
+    const data = await AuthenticateByName(username, password);
 
     if ('error' in data && data.error) {
       setSubmitting(false);
       return;
     } else {
+      setCookie(USER_ID, (data as UsersAuthByNameResponse).User?.Id);
+      setCookie(USER_TOKEN, (data as UsersAuthByNameResponse).AccessToken);
       Storage.set(USER_DATA, data);
       router.push('/dashboard');
     }
@@ -108,7 +114,7 @@ export default function LoginPage() {
             />
           </div>
         </div>
-        {isOpen && <ModalComponent />}
+        {isModalOpen && <ModalComponent />}
       </main>
     </FocusContext.Provider>
   );
