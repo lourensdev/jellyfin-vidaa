@@ -29,8 +29,8 @@ export default function ModalComponent() {
           <h2 className="text-4xl mb-4">Exit</h2>
           <p className="mb-10">Are you sure you want to close the app?</p>
           <div className="flex justify-between">
-            <Button label={'Yes'} onEnterPress={window.close} />
             <Button label={'No'} onEnterPress={() => closeModal()} />
+            <Button label={'Yes'} onEnterPress={window.close} />
           </div>
         </div>
       </div>

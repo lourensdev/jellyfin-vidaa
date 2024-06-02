@@ -2,252 +2,272 @@
 
 import CardComponent from '@/src/components/card';
 import { SliderComponent } from '@/src/components/slider';
+import { useFocusStore } from '@/src/stores/focus.store';
+import {
+  FocusContext,
+  setFocus,
+  useFocusable,
+} from '@noriginmedia/norigin-spatial-navigation';
 
-export default function Home() {
+export default function Dashboard() {
+  const { lastFocused, setLastFocused } = useFocusStore();
+  const { ref, focusKey } = useFocusable({
+    onFocus: () => {
+      if (lastFocused) {
+        setTimeout(() => {
+          setFocus(lastFocused);
+          setLastFocused(null);
+        }, 50);
+      }
+    },
+  });
+
   return (
-    <main className="flex flex-col gap-10 py-8">
-      <SliderComponent isFocused={true}>
-        <CardComponent
-          isLandscape={true}
-          isLarge={true}
-          title="Shadow Hunter"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent
-          isLandscape={true}
-          isLarge={true}
-          title="Super Puppy"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent
-          isLandscape={true}
-          isLarge={true}
-          title="Power Sisters"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent
-          isLandscape={true}
-          isLarge={true}
-          title="Earth"
-          image="https://picsum.photos/800/440"
-        />
-      </SliderComponent>
-      <SliderComponent>
-        <CardComponent
-          title="Shadow Hunter"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent
-          hideTitle={true}
-          title="Super Puppy"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent
-          title="Power Sisters"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent title="Earth" image="https://picsum.photos/800/440" />
-        <CardComponent
-          title="Shadow Hunter"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent
-          hideTitle={true}
-          title="Super Puppy"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent
-          title="Power Sisters"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent title="Earth" image="https://picsum.photos/800/440" />
-        <CardComponent
-          title="Shadow Hunter"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent
-          hideTitle={true}
-          title="Super Puppy"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent
-          title="Power Sisters"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent title="Earth" image="https://picsum.photos/800/440" />
-        <CardComponent
-          title="Shadow Hunter"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent
-          hideTitle={true}
-          title="Super Puppy"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent
-          title="Power Sisters"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent title="Earth" image="https://picsum.photos/800/440" />
-        <CardComponent
-          title="Shadow Hunter"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent
-          hideTitle={true}
-          title="Super Puppy"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent
-          title="Power Sisters"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent title="Earth" image="https://picsum.photos/800/440" />
-      </SliderComponent>
-      <SliderComponent>
-        <CardComponent
-          title="Shadow Hunter"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent
-          hideTitle={true}
-          title="Super Puppy"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent
-          title="Power Sisters"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent title="Earth" image="https://picsum.photos/800/440" />
-        <CardComponent
-          title="Shadow Hunter"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent
-          hideTitle={true}
-          title="Super Puppy"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent
-          title="Power Sisters"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent title="Earth" image="https://picsum.photos/800/440" />
-        <CardComponent
-          title="Shadow Hunter"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent
-          hideTitle={true}
-          title="Super Puppy"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent
-          title="Power Sisters"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent title="Earth" image="https://picsum.photos/800/440" />
-        <CardComponent
-          title="Shadow Hunter"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent
-          hideTitle={true}
-          title="Super Puppy"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent
-          title="Power Sisters"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent title="Earth" image="https://picsum.photos/800/440" />
-        <CardComponent
-          title="Shadow Hunter"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent
-          hideTitle={true}
-          title="Super Puppy"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent
-          title="Power Sisters"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent title="Earth" image="https://picsum.photos/800/440" />
-      </SliderComponent>
-      <SliderComponent>
-        <CardComponent
-          title="Shadow Hunter"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent
-          hideTitle={true}
-          title="Super Puppy"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent
-          title="Power Sisters"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent title="Earth" image="https://picsum.photos/800/440" />
-        <CardComponent
-          title="Shadow Hunter"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent
-          hideTitle={true}
-          title="Super Puppy"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent
-          title="Power Sisters"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent title="Earth" image="https://picsum.photos/800/440" />
-        <CardComponent
-          title="Shadow Hunter"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent
-          hideTitle={true}
-          title="Super Puppy"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent
-          title="Power Sisters"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent title="Earth" image="https://picsum.photos/800/440" />
-        <CardComponent
-          title="Shadow Hunter"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent
-          hideTitle={true}
-          title="Super Puppy"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent
-          title="Power Sisters"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent title="Earth" image="https://picsum.photos/800/440" />
-        <CardComponent
-          title="Shadow Hunter"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent
-          hideTitle={true}
-          title="Super Puppy"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent
-          title="Power Sisters"
-          image="https://picsum.photos/800/440"
-        />
-        <CardComponent title="Earth" image="https://picsum.photos/800/440" />
-      </SliderComponent>
-    </main>
+    <FocusContext.Provider value={focusKey}>
+      <main ref={ref} className="flex flex-col gap-10 py-8">
+        <SliderComponent isFocused={true}>
+          <CardComponent
+            isLandscape={true}
+            isLarge={true}
+            title="Shadow Hunter"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent
+            isLandscape={true}
+            isLarge={true}
+            title="Super Puppy"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent
+            isLandscape={true}
+            isLarge={true}
+            title="Power Sisters"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent
+            isLandscape={true}
+            isLarge={true}
+            title="Earth"
+            image="https://picsum.photos/800/440"
+          />
+        </SliderComponent>
+        <SliderComponent>
+          <CardComponent
+            title="Shadow Hunter"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent
+            hideTitle={true}
+            title="Super Puppy"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent
+            title="Power Sisters"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent title="Earth" image="https://picsum.photos/800/440" />
+          <CardComponent
+            title="Shadow Hunter"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent
+            hideTitle={true}
+            title="Super Puppy"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent
+            title="Power Sisters"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent title="Earth" image="https://picsum.photos/800/440" />
+          <CardComponent
+            title="Shadow Hunter"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent
+            hideTitle={true}
+            title="Super Puppy"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent
+            title="Power Sisters"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent title="Earth" image="https://picsum.photos/800/440" />
+          <CardComponent
+            title="Shadow Hunter"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent
+            hideTitle={true}
+            title="Super Puppy"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent
+            title="Power Sisters"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent title="Earth" image="https://picsum.photos/800/440" />
+          <CardComponent
+            title="Shadow Hunter"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent
+            hideTitle={true}
+            title="Super Puppy"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent
+            title="Power Sisters"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent title="Earth" image="https://picsum.photos/800/440" />
+        </SliderComponent>
+        <SliderComponent>
+          <CardComponent
+            title="Shadow Hunter"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent
+            hideTitle={true}
+            title="Super Puppy"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent
+            title="Power Sisters"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent title="Earth" image="https://picsum.photos/800/440" />
+          <CardComponent
+            title="Shadow Hunter"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent
+            hideTitle={true}
+            title="Super Puppy"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent
+            title="Power Sisters"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent title="Earth" image="https://picsum.photos/800/440" />
+          <CardComponent
+            title="Shadow Hunter"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent
+            hideTitle={true}
+            title="Super Puppy"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent
+            title="Power Sisters"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent title="Earth" image="https://picsum.photos/800/440" />
+          <CardComponent
+            title="Shadow Hunter"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent
+            hideTitle={true}
+            title="Super Puppy"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent
+            title="Power Sisters"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent title="Earth" image="https://picsum.photos/800/440" />
+          <CardComponent
+            title="Shadow Hunter"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent
+            hideTitle={true}
+            title="Super Puppy"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent
+            title="Power Sisters"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent title="Earth" image="https://picsum.photos/800/440" />
+        </SliderComponent>
+        <SliderComponent>
+          <CardComponent
+            title="Shadow Hunter"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent
+            hideTitle={true}
+            title="Super Puppy"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent
+            title="Power Sisters"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent title="Earth" image="https://picsum.photos/800/440" />
+          <CardComponent
+            title="Shadow Hunter"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent
+            hideTitle={true}
+            title="Super Puppy"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent
+            title="Power Sisters"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent title="Earth" image="https://picsum.photos/800/440" />
+          <CardComponent
+            title="Shadow Hunter"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent
+            hideTitle={true}
+            title="Super Puppy"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent
+            title="Power Sisters"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent title="Earth" image="https://picsum.photos/800/440" />
+          <CardComponent
+            title="Shadow Hunter"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent
+            hideTitle={true}
+            title="Super Puppy"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent
+            title="Power Sisters"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent title="Earth" image="https://picsum.photos/800/440" />
+          <CardComponent
+            title="Shadow Hunter"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent
+            hideTitle={true}
+            title="Super Puppy"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent
+            title="Power Sisters"
+            image="https://picsum.photos/800/440"
+          />
+          <CardComponent title="Earth" image="https://picsum.photos/800/440" />
+        </SliderComponent>
+      </main>
+    </FocusContext.Provider>
   );
 }

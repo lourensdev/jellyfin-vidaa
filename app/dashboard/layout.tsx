@@ -6,7 +6,7 @@ import {
   init,
   useFocusable,
 } from '@noriginmedia/norigin-spatial-navigation';
-import Home from './page';
+import Dashboard from './page';
 import { NavBar } from '@/src/components/navbar';
 import NavItem from '@/src/components/navitem';
 import { CollectionType } from '@/@types/collections.types';
@@ -32,11 +32,13 @@ export default function DasbhboardLayout() {
             <NavBar>
               <NavItem title="TV Series" type={CollectionType.TV_SHOWS} />
               <NavItem title="Movies" type={CollectionType.MOVIES} />
+              <div className="flex-grow" />
+              <NavItem title="Exit" isExit={true} />
             </NavBar>
           )}
         </div>
         <div className="content">
-          <Home />
+          <Dashboard />
           {isModalOpen && <ModalComponent />}
         </div>
       </div>

@@ -29,7 +29,7 @@ export default function CardComponent(props: CardComponentProps) {
       closeNavbar();
       setTimeout(() => {
         setLastFocused(focusKey);
-      }, 1000);
+      }, 500);
     }
   }, [ref, focused]);
 
