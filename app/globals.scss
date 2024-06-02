@@ -26,6 +26,9 @@ body {
   .bg-jellyfin-button-gradient {
     background-image: linear-gradient(to right top, var(--jellyfin-gradient-start), var(--jellyfin-gradient-end));
   }
+  .bg-jellyfin-navbar-gradient {
+    background: linear-gradient(90deg, rgba(0,0,0,1) 15%, rgba(0,0,0,0) 100%);
+  }
   .bg-gradient-radial {
     background-image: radial-gradient(var(--tw-gradient-stops));
   }
@@ -56,5 +59,47 @@ body {
 
 @keyframes l13{ 
   100%{transform: rotate(1turn)}
+}
+
+.layout {
+  --navbarWidth: 300px;
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+
+  .navbar, 
+  .content {
+    transition: width 0.3s ease, max-width 0.3s ease;
+  }
+
+  .navbar {
+    width: 0;
+    max-width: 0;
+    overflow-y: auto;
+
+    > * {
+      width: var(--navbarWidth);
+      max-width: var(--navbarWidth);
+    }
+  }
+
+  .content {
+    flex: 1;
+    width: 100%;
+    max-width: 100%;
+    overflow: auto;
+  }
+
+  &.focused {
+    .navbar {
+      width: var(--navbarWidth);
+      max-width: var(--navbarWidth);
+    }
+
+    .content {
+      width: calc(100% - var(--navbarWidth));
+      max-width: calc(100% - var(--navbarWidth));
+    }
+  }
 }
 

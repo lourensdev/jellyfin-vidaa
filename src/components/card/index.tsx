@@ -1,7 +1,9 @@
 'use client';
 
+import { useNavbar } from '@/src/hooks/useNavbar';
+import { useFocusStore } from '@/src/stores/focus.store';
 import { useFocusable } from '@noriginmedia/norigin-spatial-navigation';
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 
 export interface CardComponentProps {
   title: string;
@@ -13,7 +15,9 @@ export interface CardComponentProps {
 }
 
 export default function CardComponent(props: CardComponentProps) {
-  const { ref, focused } = useFocusable();
+  const { ref, focused, focusKey } = useFocusable();
+  const { closeNavbar } = useNavbar();
+  const { setLastFocused } = useFocusStore();
 
   useEffect(() => {
     if (focused) {
@@ -22,6 +26,10 @@ export default function CardComponent(props: CardComponentProps) {
         block: 'center',
         inline: 'center',
       });
+      closeNavbar();
+      setTimeout(() => {
+        setLastFocused(focusKey);
+      }, 1000);
     }
   }, [ref, focused]);
 

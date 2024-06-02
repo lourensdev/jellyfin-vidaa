@@ -1,15 +1,17 @@
 import { useEffect } from 'react';
-import { useModalStore } from '@/src/stores/modal.store';
 import { VK_BACK_SPACE } from '@/src/utilities/constants';
+import { useNavbarStore } from '../stores/navbar.store';
+import { useModalStore } from '../stores/modal.store';
 
-export const useModal = () => {
-  const { isModalOpen, closeModal, openModal } = useModalStore();
+export const useNavbar = () => {
+  const { isNavbarOpen, closeNavbar, openNavbar } = useNavbarStore();
+  const { openModal } = useModalStore();
 
   useEffect(() => {
     const handleKeydown = (ev: KeyboardEvent) => {
       switch (ev.keyCode) {
         case VK_BACK_SPACE:
-          isModalOpen ? closeModal() : openModal();
+          isNavbarOpen ? openModal() : openNavbar();
           break;
       }
       ev.preventDefault();
@@ -20,7 +22,7 @@ export const useModal = () => {
     return () => {
       document.removeEventListener('keydown', handleKeydown);
     };
-  }, [isModalOpen, closeModal, openModal]);
+  }, [isNavbarOpen, closeNavbar, openNavbar]);
 
-  return { isModalOpen };
+  return { isNavbarOpen, closeNavbar, openNavbar };
 };
