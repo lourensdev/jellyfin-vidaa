@@ -10,7 +10,6 @@ import { NavBar } from '@/src/components/navbar';
 import NavItem from '@/src/components/navitem';
 import { CollectionType } from '@/@types/collections.types';
 import { useModalStore } from '@/src/stores/modal.store';
-import { useNavbar } from '@/src/hooks/useNavbar';
 import { useEffect } from 'react';
 import { useApiStore } from '@/src/stores/api.store';
 import { UsersViewsResponse } from '@/@types/api/user.types';
@@ -29,8 +28,6 @@ export default function ListLayout({
 }>) {
   const { ref, focusKey } = useFocusable();
   const params = useSearchParams();
-
-  const { isNavbarOpen } = useNavbar();
   const { isModalOpen } = useModalStore();
   const { views, setViews, activeView, setActiveView } = useApiStore();
 
@@ -79,9 +76,9 @@ export default function ListLayout({
 
   return (
     <FocusContext.Provider value={focusKey}>
-      <div ref={ref} className={`layout ${isNavbarOpen ? 'focused' : ''}`}>
+      <div ref={ref} className={`layout focused`}>
         <div className="navbar">
-          {isNavbarOpen && (
+          {views && (
             <NavBar>
               <NavItem title="Home" type={CollectionType.HOME} />
               <>{renderViewItems()}</>

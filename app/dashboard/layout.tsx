@@ -6,13 +6,11 @@ import {
   init,
   useFocusable,
 } from '@noriginmedia/norigin-spatial-navigation';
-import Dashboard from './page';
 import { NavBar } from '@/src/components/navbar';
 import NavItem from '@/src/components/navitem';
 import { CollectionType } from '@/@types/collections.types';
 import { useModalStore } from '@/src/stores/modal.store';
-import { useNavbar } from '@/src/hooks/useNavbar';
-import { ReactElement, act, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Views } from '../api/users/views';
 import { useApiStore } from '@/src/stores/api.store';
 import { UsersViewsResponse } from '@/@types/api/user.types';
@@ -28,8 +26,6 @@ export default function DasbhboardLayout({
   children: React.ReactNode;
 }>) {
   const { ref, focusKey } = useFocusable();
-
-  const { isNavbarOpen } = useNavbar();
   const { isModalOpen } = useModalStore();
   const { views, setViews } = useApiStore();
 
@@ -59,9 +55,9 @@ export default function DasbhboardLayout({
 
   return (
     <FocusContext.Provider value={focusKey}>
-      <div ref={ref} className={`layout ${isNavbarOpen ? 'focused' : ''}`}>
+      <div ref={ref} className={`layout focused`}>
         <div className="navbar">
-          {isNavbarOpen && (
+          {views && (
             <NavBar>
               <NavItem title="Home" type={CollectionType.HOME} active={true} />
               <>{renderViewItems()}</>

@@ -61,8 +61,8 @@ export default function NavItem({
       ref={ref}
       className={`rounded-3xl py-2 px-8 w-60 flex gap-3 justify-start items-center border-4 border-transparent ${
         isExit ? 'text-xl' : 'text-2xl'
-      } ${focused ? 'bg-white text-black' : ''}
-       ${active && !focused ? 'border-white' : ''}`}
+      } ${active && !focused ? 'bg-white text-black' : ''}
+       ${focused ? 'border-white' : ''}`}
     >
       {type ? renderIcon(type) : <ExitToApp />}
       {title}
