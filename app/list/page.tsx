@@ -13,6 +13,7 @@ import { ItemsByType } from '../api/users/itemsByType';
 import { GridComponent } from '@/src/components/grid';
 import PageLoader from '@/src/components/pageLoader';
 import { LoaderStyle } from '@/src/components/loader';
+import { CollectionType } from '@/@types/collections.types';
 
 export default function Dashboard() {
   const { views, activeView, allMediaByType, setAllMediaByType } =
@@ -26,14 +27,17 @@ export default function Dashboard() {
       const view = views?.find(view => view.type === activeView);
       const data = await ItemsByType(view!.label, view!.id);
 
-      const remappedViews = (data as UsersItemsByTypeResponse).Items!.map(
-        item => ({
-          label: item.Name || '',
-          id: item.Id || '',
-          year: item.ProductionYear || null,
-          image: getImagePath(item.Id, item.ImageTags!.Primary, 240, 360),
-        }),
+      const filterOutFolders = (data as UsersItemsByTypeResponse).Items!.filter(
+        item =>
+          view?.type === CollectionType.MOVIES ? !item.IsFolder : item.IsFolder,
       );
+
+      const remappedViews = filterOutFolders.map(item => ({
+        label: item.Name || '',
+        id: item.Id || '',
+        year: item.ProductionYear || null,
+        image: getImagePath(item.Id, item.ImageTags!.Primary, 240, 360),
+      }));
 
       setAllMediaByType(remappedViews);
     };

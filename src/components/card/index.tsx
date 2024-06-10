@@ -2,10 +2,11 @@
 
 import { useNavbar } from '@/src/hooks/useNavbar';
 import { useFocusStore } from '@/src/stores/focus.store';
+import { Movie } from '@material-ui/icons';
 import { useFocusable } from '@noriginmedia/norigin-spatial-navigation';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export interface CardComponentProps {
   title: string;
@@ -31,6 +32,7 @@ export default function CardComponent(props: CardComponentProps) {
   });
   const { closeNavbar } = useNavbar();
   const { setLastFocused } = useFocusStore();
+  const [imageError, setImageError] = useState(false);
 
   useEffect(() => {
     if (focused) {
@@ -104,16 +106,23 @@ export default function CardComponent(props: CardComponentProps) {
             </h5>
           )}
         </div>
-        <Image
-          src={props.image}
-          alt={props.title}
-          width={props.width}
-          height={props.height}
-          style={{ opacity: 0, transition: 'opacity 0.5s ease' }}
-          onLoad={e => e.currentTarget.style.setProperty('opacity', '1')}
-          loading="lazy"
-          className={getImageClassNames()}
-        />
+        {!imageError ? (
+          <Image
+            src={props.image}
+            alt={props.title}
+            width={props.width}
+            height={props.height}
+            style={{ opacity: 0, transition: 'opacity 0.5s ease' }}
+            onLoad={e => e.currentTarget.style.setProperty('opacity', '1')}
+            onError={() => setImageError(true)}
+            loading="lazy"
+            className={getImageClassNames()}
+          />
+        ) : (
+          <div className="flex justify-center items-center w-full h-full rounded bg-white/10 text-white text-2xl">
+            <Movie fontSize={'large'} />
+          </div>
+        )}
       </div>
       {props.progress && (
         <div className="mt-4 h-2 rounded overflow-hidden w-full bg-black opacity-75">
