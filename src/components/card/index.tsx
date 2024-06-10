@@ -3,22 +3,32 @@
 import { useNavbar } from '@/src/hooks/useNavbar';
 import { useFocusStore } from '@/src/stores/focus.store';
 import { useFocusable } from '@noriginmedia/norigin-spatial-navigation';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
 export interface CardComponentProps {
   title: string;
   image: string;
   year?: number | null;
+  width: number;
+  height: number;
   isFocused?: boolean;
   isLandscape?: boolean;
   isLarge?: boolean;
   hideTitle?: boolean;
+  showTitleAlways?: boolean;
   hideGradientOverlay?: boolean;
   progress?: number;
+  isGridCard?: boolean;
+  path?: string;
 }
 
 export default function CardComponent(props: CardComponentProps) {
-  const { ref, focused, focusKey } = useFocusable();
+  const router = useRouter();
+  const { ref, focused, focusKey } = useFocusable({
+    onEnterPress: () => props.path && router.push(props.path),
+  });
   const { closeNavbar } = useNavbar();
   const { setLastFocused } = useFocusStore();
 
@@ -43,9 +53,9 @@ export default function CardComponent(props: CardComponentProps) {
       'relative flex flex-col justify-end ring-4 ring-transparent transition-shadow box-border';
     classNames += focused ? ' ring-white' : '';
     classNames += !props.isLandscape ? ' aspect-[1/1.5]' : ' aspect-[16/9]';
-    classNames += !props.isLarge
-      ? ' w-[15rem] rounded'
-      : ' w-[42rem] rounded-xl';
+    classNames += !props.isLarge ? ' rounded' : ' w-[42rem] rounded-xl';
+    classNames +=
+      props.isLandscape && !props.isLarge ? ' w-[23rem]' : ' w-[15rem]';
     return classNames;
   };
 
@@ -57,7 +67,7 @@ export default function CardComponent(props: CardComponentProps) {
 
   const getDefaultTitleClassNames = (): string => {
     let classNames = 'pt-4 text-center opacity-0 transition-opacity';
-    classNames += focused ? ' opacity-100' : '';
+    classNames += focused || props.showTitleAlways ? ' opacity-100' : '';
     return classNames;
   };
 
@@ -70,7 +80,17 @@ export default function CardComponent(props: CardComponentProps) {
   };
 
   return (
-    <div ref={ref} className="first:ps-overscan last:pe-overscan p-1">
+    <div
+      ref={ref}
+      className={`${
+        props.isGridCard
+          ? ''
+          : 'first:ps-overscan last:pe-overscan p-1 box-content'
+      }`}
+      style={{
+        width: props.width + 'px',
+      }}
+    >
       <div className={getWrapperClassNames()}>
         <div className={getTitleClassNames()}>
           {props.isLarge && !props.hideTitle && (
@@ -84,9 +104,14 @@ export default function CardComponent(props: CardComponentProps) {
             </h5>
           )}
         </div>
-        <img
+        <Image
           src={props.image}
           alt={props.title}
+          width={props.width}
+          height={props.height}
+          style={{ opacity: 0, transition: 'opacity 0.5s ease' }}
+          onLoad={e => e.currentTarget.style.setProperty('opacity', '1')}
+          loading="lazy"
           className={getImageClassNames()}
         />
       </div>
@@ -101,7 +126,7 @@ export default function CardComponent(props: CardComponentProps) {
           ></div>
         </div>
       )}
-      {!props.isLarge && !props.hideTitle && (
+      {((!props.isLarge && !props.hideTitle) || props.showTitleAlways) && (
         <div className={getDefaultTitleClassNames()}>
           <h5 className="text-lg">
             {props.title}

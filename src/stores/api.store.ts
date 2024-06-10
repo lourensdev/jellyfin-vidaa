@@ -16,6 +16,8 @@ export type ApiMediaItemType = {
 };
 
 type ApiState = {
+  activeView: CollectionType | null;
+  setActiveView: (value: CollectionType) => void;
   views: ApiViewsType[] | null;
   setViews: (value: ApiViewsType[]) => void;
   resumeMedia: ApiMediaItemType[] | null;
@@ -24,9 +26,15 @@ type ApiState = {
   setLatestShows: (value: ApiMediaItemType[]) => void;
   latestMovies: ApiMediaItemType[] | null;
   setLatestMovies: (value: ApiMediaItemType[]) => void;
+  allMediaByType: ApiMediaItemType[] | null;
+  setAllMediaByType: (value: ApiMediaItemType[]) => void;
 };
 
 export const useApiStore = create<ApiState>((set, get) => ({
+  activeView: null,
+  setActiveView: (value: CollectionType) => {
+    set({ activeView: value });
+  },
   views: null,
   setViews: (value: ApiViewsType[]) => {
     set({ views: value });
@@ -42,5 +50,9 @@ export const useApiStore = create<ApiState>((set, get) => ({
   latestMovies: null,
   setLatestMovies: (value: ApiMediaItemType[]) => {
     set({ latestMovies: value });
+  },
+  allMediaByType: null,
+  setAllMediaByType: (value: ApiMediaItemType[]) => {
+    set({ allMediaByType: value });
   },
 }));

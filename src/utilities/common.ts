@@ -24,7 +24,10 @@ export const getImagePath = (
   imageTag: string,
   width: number = 217,
   height: number = 326,
+  isBackdrop: boolean = false,
 ) => {
   const server = getCookie(SERVER_URL);
-  return `${server}/Items/${itemId}/Images/Primary?fillHeight=${height}&fillWidth=${width}&quality=96&tag=${imageTag}`;
+  return `${server}/Items/${itemId}/Images/${
+    isBackdrop ? 'Backdrop' : 'Primary'
+  }?fillHeight=${height}&fillWidth=${width}&quality=96&tag=${imageTag}`;
 };

@@ -2,21 +2,35 @@
 
 import { CollectionType } from '@/@types/collections.types';
 import { useFocusable } from '@noriginmedia/norigin-spatial-navigation';
-import { Tv, Theaters, ExitToApp } from '@material-ui/icons';
+import { Tv, Theaters, ExitToApp, Home } from '@material-ui/icons';
 import { useEffect } from 'react';
 import { useModalStore } from '@/src/stores/modal.store';
+import { useRouter } from 'next/navigation';
 
 export interface CardComponentProps {
   title: string;
   type?: CollectionType;
+  active?: boolean;
   isExit?: boolean;
 }
 
-export default function NavItem({ title, type, isExit }: CardComponentProps) {
+export default function NavItem({
+  title,
+  type,
+  active,
+  isExit,
+}: CardComponentProps) {
+  const router = useRouter();
   const { openModal } = useModalStore();
   const { ref, focused } = useFocusable({
     onEnterPress: () => {
-      isExit && openModal();
+      if (isExit) {
+        openModal();
+      } else {
+        const path =
+          type !== CollectionType.HOME ? `/list/?view=${type}` : '/dashboard';
+        router.push(path);
+      }
     },
   });
 
@@ -36,17 +50,19 @@ export default function NavItem({ title, type, isExit }: CardComponentProps) {
         return <Tv />;
       case CollectionType.MOVIES:
         return <Theaters />;
+      case CollectionType.HOME:
       default:
-        return <></>;
+        return <Home />;
     }
   };
 
   return (
     <div
       ref={ref}
-      className={`rounded-3xl py-3 px-8 w-60 flex gap-3 justify-start items-center ${
+      className={`rounded-3xl py-2 px-8 w-60 flex gap-3 justify-start items-center border-4 border-transparent ${
         isExit ? 'text-xl' : 'text-2xl'
-      } ${focused ? 'bg-white text-black' : ''}`}
+      } ${focused ? 'bg-white text-black' : ''}
+       ${active && !focused ? 'border-white' : ''}`}
     >
       {type ? renderIcon(type) : <ExitToApp />}
       {title}
