@@ -39,7 +39,6 @@ export default function SplashPage() {
           width={500}
           height={200}
           alt="Jellyfin React"
-          top-full
           style={{
             ...springs,
           }}

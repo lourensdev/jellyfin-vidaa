@@ -28,7 +28,7 @@ export default function NavItem({
         openModal();
       } else {
         const path =
-          type !== CollectionType.HOME ? `/list/?view=${type}` : '/dashboard';
+          type !== CollectionType.HOME ? `/list?view=${type}` : '/dashboard';
         router.push(path);
       }
     },

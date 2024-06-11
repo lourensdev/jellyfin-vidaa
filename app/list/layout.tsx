@@ -28,13 +28,14 @@ export default function ListLayout({
 }>) {
   const { ref, focusKey } = useFocusable();
   const params = useSearchParams();
+  const currentView: CollectionType | undefined = params.get(
+    'view',
+  ) as CollectionType;
+
   const { isModalOpen } = useModalStore();
   const { views, setViews, activeView, setActiveView } = useApiStore();
 
   const checkParams = () => {
-    const currentView: CollectionType | undefined = params.get(
-      'view',
-    ) as CollectionType;
     if (currentView && activeView !== currentView) {
       setActiveView(currentView);
     }
@@ -42,7 +43,7 @@ export default function ListLayout({
 
   useEffect(() => {
     checkParams();
-  }, [params]);
+  }, [currentView]);
 
   useEffect(() => {
     if (views !== null && activeView !== null) return;

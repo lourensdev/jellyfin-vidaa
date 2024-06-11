@@ -14,17 +14,21 @@ import { GridComponent } from '@/src/components/grid';
 import PageLoader from '@/src/components/pageLoader';
 import { LoaderStyle } from '@/src/components/loader';
 import { CollectionType } from '@/@types/collections.types';
+import { useSearchParams } from 'next/navigation';
 
 export default function Dashboard() {
-  const { views, activeView, allMediaByType, setAllMediaByType } =
-    useApiStore();
+  const { views, allMediaByType, setAllMediaByType } = useApiStore();
   const { ref, focusKey } = useFocusable();
+  const params = useSearchParams();
+  const currentView: CollectionType | undefined = params.get(
+    'view',
+  ) as CollectionType;
 
   const getAllMediaByType = () => {
     setAllMediaByType([]);
 
     const getAllItemsByType = async () => {
-      const view = views?.find(view => view.type === activeView);
+      const view = views?.find(view => view.type === currentView);
       const data = await ItemsByType(view!.label, view!.id);
 
       const filterOutFolders = (data as UsersItemsByTypeResponse).Items!.filter(
@@ -48,13 +52,13 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    if (activeView && views) {
+    if (currentView) {
       getAllMediaByType();
     }
-  }, [activeView, views]);
+  }, [currentView]);
 
   const getViewTitle = () => {
-    return views?.find(view => view.type === activeView)?.label;
+    return views?.find(view => view.type === currentView)?.label;
   };
 
   return (

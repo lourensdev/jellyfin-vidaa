@@ -45,3 +45,6 @@ Thumbs.db
 
 # Yarn
 .yarn/cache
+
+# Million Lint
+.million

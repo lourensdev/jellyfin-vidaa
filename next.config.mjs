@@ -1,18 +1,18 @@
+import MillionLint from '@million/lint';
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
   experimental: {
-    missingSuspenseWithCSRBailout: false,
+    missingSuspenseWithCSRBailout: false
   },
   images: {
-    remotePatterns: [
-      {
-        protocol: 'http',
-        hostname: '*.*.*.*',
-        pathname: '/Items/**',
-      },
-    ],
-  },
+    remotePatterns: [{
+      protocol: 'http',
+      hostname: '*.*.*.*',
+      pathname: '/Items/**'
+    }]
+  }
 };
-
-export default nextConfig;
+export default MillionLint.next({
+  rsc: true
+})(nextConfig);
