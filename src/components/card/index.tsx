@@ -23,6 +23,8 @@ export interface CardComponentProps {
   progress?: number;
   isGridCard?: boolean;
   path?: string;
+  unplayedCount?: number;
+  isFavourite?: boolean;
 }
 
 export default function CardComponent(props: CardComponentProps) {
@@ -52,7 +54,7 @@ export default function CardComponent(props: CardComponentProps) {
 
   const getWrapperClassNames = (): string => {
     let classNames =
-      'relative flex flex-col justify-end ring-4 ring-transparent transition-shadow box-border';
+      'relative flex flex-col justify-end ring-4 ring-transparent transition-shadow box-border bg-white/10';
     classNames += focused ? ' ring-white' : '';
     classNames += !props.isLandscape ? ' aspect-[1/1.5]' : ' aspect-[16/9]';
     classNames += !props.isLarge ? ' rounded' : ' w-[42rem] rounded-xl';
@@ -142,6 +144,11 @@ export default function CardComponent(props: CardComponentProps) {
             {props.year && (
               <span className="text-md opacity-50 inline-block pl-2">
                 ({props.year})
+              </span>
+            )}
+            {props.unplayedCount && (
+              <span className="w-7 flex-inline px-2 py-1 ml-2 justify-center items-center text-sm bg-[--jellyfin-gradient-end] rounded">
+                {props.unplayedCount}
               </span>
             )}
           </h5>

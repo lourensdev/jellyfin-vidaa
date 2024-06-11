@@ -56,17 +56,17 @@ export default function DasbhboardLayout({
   return (
     <FocusContext.Provider value={focusKey}>
       <div ref={ref} className={`layout focused`}>
-        <div className="navbar">
-          {views && (
+        {views && (
+          <div className="navbar">
             <NavBar>
               <NavItem title="Home" type={CollectionType.HOME} active={true} />
               <>{renderViewItems()}</>
               <div className="flex-grow" />
               <NavItem title="Exit" isExit={true} />
             </NavBar>
-          )}
-        </div>
-        <div className="content">
+          </div>
+        )}
+        <div className={views ? 'content' : 'w-full'}>
           {children}
           {isModalOpen && <ModalComponent />}
         </div>

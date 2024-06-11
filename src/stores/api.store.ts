@@ -13,6 +13,8 @@ export type ApiMediaItemType = {
   year: number | null;
   image: string;
   progress?: number;
+  isFavourite?: boolean;
+  unplayedCount?: number;
 };
 
 type ApiState = {

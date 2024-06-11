@@ -37,6 +37,8 @@ export default function Dashboard() {
         id: item.Id || '',
         year: item.ProductionYear || null,
         image: getImagePath(item.Id, item.ImageTags!.Primary, 240, 360),
+        isFavourite: item.UserData?.IsFavorite || false,
+        unplayedCount: item.UserData?.UnplayedItemCount || undefined,
       }));
 
       setAllMediaByType(remappedViews);
@@ -77,6 +79,8 @@ export default function Dashboard() {
                   isGridCard={true}
                   width={240}
                   height={360}
+                  isFavourite={movie.isFavourite}
+                  unplayedCount={movie.unplayedCount}
                 />
               ))}
             </GridComponent>
