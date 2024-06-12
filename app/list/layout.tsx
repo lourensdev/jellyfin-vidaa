@@ -15,6 +15,7 @@ import { useApiStore } from '@/src/stores/api.store';
 import { UsersViewsResponse } from '@/@types/api/user.types';
 import { Views } from '@/app/api/users/views';
 import { useSearchParams } from 'next/navigation';
+import { useBackNav } from '@/src/hooks/useBackNav';
 
 init({
   debug: false,
@@ -31,9 +32,10 @@ export default function ListLayout({
   const currentView: CollectionType | undefined = params.get(
     'view',
   ) as CollectionType;
-
   const { isModalOpen } = useModalStore();
   const { views, setViews, activeView, setActiveView } = useApiStore();
+
+  useBackNav();
 
   const checkParams = () => {
     if (currentView && activeView !== currentView) {

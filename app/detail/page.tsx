@@ -9,10 +9,12 @@ import {
   useFocusable,
 } from '@noriginmedia/norigin-spatial-navigation';
 import Image from 'next/image';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Detail() {
   const { ref, focusKey, focusSelf } = useFocusable();
+  const [backdropLoaded, setBackdropLoaded] = useState(false);
+  const [logoLoaded, setLogoLoaded] = useState(false);
   const { mediaItem } = useApiStore();
 
   useEffect(() => {
@@ -27,10 +29,11 @@ export default function Detail() {
 
   return (
     <FocusContext.Provider value={focusKey}>
-      <main ref={ref} className="flex">
+      <main ref={ref} className="flex" key={`${mediaItem?.Id}-item`}>
         <div className="absolute z-0 top-0 right-0 left-0 bottom-0">
           <div className="absolute z-10 top-0 right-0 left-0 bottom-0 bg-detail-gradient" />
           <Image
+            key={`${mediaItem?.Id}-backdrop`}
             src={getImagePath(
               mediaItem?.Id,
               mediaItem?.BackdropImageTags
@@ -40,13 +43,20 @@ export default function Detail() {
               1080,
               ImageTypes.BACKDROP,
             )}
+            onLoad={() => setBackdropLoaded(true)}
+            className={backdropLoaded ? 'opacity-1' : 'opacity-0'}
             layout="fill"
             objectFit="cover"
             alt={mediaItem?.Name || 'cover image'}
           />
         </div>
-        <div className="relative z-20 px-overscan pt-[30vh] pb-8 box-content w-full min-h-full">
+        <div
+          className={`relative z-20 px-overscan pt-[10vh] pb-8 box-content w-full min-h-full transition-opacity ${
+            logoLoaded ? 'opacity-1' : 'opacity-0'
+          }`}
+        >
           <Image
+            key={`${mediaItem?.Id}-logo`}
             src={getImagePath(
               mediaItem?.Id,
               mediaItem?.ImageTags?.Logo || '',
@@ -55,16 +65,17 @@ export default function Detail() {
               ImageTypes.LOGO,
             )}
             className="pb-8"
+            onLoad={() => setLogoLoaded(true)}
             width={500}
             height={500}
             style={{ width: '20vw', height: 'auto' }}
             alt="media item image"
           />
           <div className="lg:w-6/12 md:w-full">
-            <p className="opacity-70 text-lg font-light pb-8">
+            <p className="opacity-70 text-2xl font-light pb-8">
               {mediaItem?.Overview}
             </p>
-            <p className="opacity-70 text-lg pb-8">
+            <p className="opacity-70 text-2xl pb-8">
               <div>
                 <strong className="flex items-center gap-1">
                   {ratings.join(' • ')}

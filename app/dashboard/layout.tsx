@@ -9,11 +9,11 @@ import {
 import { NavBar } from '@/src/components/navbar';
 import NavItem from '@/src/components/navitem';
 import { CollectionType } from '@/@types/collections.types';
-import { useModalStore } from '@/src/stores/modal.store';
 import { useEffect } from 'react';
 import { Views } from '../api/users/views';
 import { useApiStore } from '@/src/stores/api.store';
 import { UsersViewsResponse } from '@/@types/api/user.types';
+import { useModal } from '@/src/hooks/useModal';
 
 init({
   debug: false,
@@ -26,7 +26,7 @@ export default function DasbhboardLayout({
   children: React.ReactNode;
 }>) {
   const { ref, focusKey } = useFocusable();
-  const { isModalOpen } = useModalStore();
+  const { isModalOpen } = useModal();
   const { views, setViews } = useApiStore();
 
   useEffect(() => {

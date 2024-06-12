@@ -13,6 +13,7 @@ import { useApiStore } from '@/src/stores/api.store';
 import { useSearchParams } from 'next/navigation';
 import { ItemDetail } from '../api/users/itemDetail';
 import { UserItemsByIdResponse } from '@/@types/api/user.types';
+import { useBackNav } from '@/src/hooks/useBackNav';
 
 init({
   debug: false,
@@ -28,8 +29,9 @@ export default function DetailLayout({
   const params = useSearchParams();
   const mediaId: string | undefined = params.get('id') as CollectionType;
   const { mediaItem, setMediaItem } = useApiStore();
-
   const { isModalOpen } = useModalStore();
+
+  useBackNav();
 
   const checkParams = () => {
     setMediaItem({});
@@ -49,7 +51,7 @@ export default function DetailLayout({
   return (
     <FocusContext.Provider value={focusKey}>
       <div ref={ref} className={`layout focused`}>
-        {mediaItem && children}
+        {children}
         {isModalOpen && <ModalComponent />}
       </div>
     </FocusContext.Provider>
