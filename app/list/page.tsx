@@ -8,7 +8,7 @@ import {
   useFocusable,
 } from '@noriginmedia/norigin-spatial-navigation';
 import { useEffect } from 'react';
-import { getImagePath } from '@/src/utilities/common';
+import { ImageTypes, getImagePath } from '@/src/utilities/common';
 import { ItemsByType } from '../api/users/itemsByType';
 import { GridComponent } from '@/src/components/grid';
 import PageLoader from '@/src/components/pageLoader';
@@ -16,7 +16,7 @@ import { LoaderStyle } from '@/src/components/loader';
 import { CollectionType } from '@/@types/collections.types';
 import { useSearchParams } from 'next/navigation';
 
-export default function Dashboard() {
+export default function List() {
   const { views, allMediaByType, setAllMediaByType } = useApiStore();
   const { ref, focusKey } = useFocusable();
   const params = useSearchParams();
@@ -40,7 +40,13 @@ export default function Dashboard() {
         label: item.Name || '',
         id: item.Id || '',
         year: item.ProductionYear || null,
-        image: getImagePath(item.Id, item.ImageTags!.Primary, 240, 360),
+        image: getImagePath(
+          item.Id,
+          item.ImageTags!.Primary,
+          240,
+          360,
+          ImageTypes.PRIMARY,
+        ),
         isFavourite: item.UserData?.IsFavorite || false,
         unplayedCount: item.UserData?.UnplayedItemCount || undefined,
       }));
@@ -85,6 +91,7 @@ export default function Dashboard() {
                   height={360}
                   isFavourite={movie.isFavourite}
                   unplayedCount={movie.unplayedCount}
+                  path={`detail?id=${movie.id}`}
                 />
               ))}
             </GridComponent>

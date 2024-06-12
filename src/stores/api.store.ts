@@ -1,3 +1,4 @@
+import { UserItemsByIdResponse } from '@/@types/api/user.types';
 import { CollectionType } from '@/@types/collections.types';
 import { create } from 'zustand';
 
@@ -30,6 +31,8 @@ type ApiState = {
   setLatestMovies: (value: ApiMediaItemType[]) => void;
   allMediaByType: ApiMediaItemType[] | null;
   setAllMediaByType: (value: ApiMediaItemType[]) => void;
+  mediaItem: UserItemsByIdResponse | null;
+  setMediaItem: (value: UserItemsByIdResponse) => void;
 };
 
 export const useApiStore = create<ApiState>((set, get) => ({
@@ -56,5 +59,9 @@ export const useApiStore = create<ApiState>((set, get) => ({
   allMediaByType: null,
   setAllMediaByType: (value: ApiMediaItemType[]) => {
     set({ allMediaByType: value });
+  },
+  mediaItem: null,
+  setMediaItem: (value: UserItemsByIdResponse) => {
+    set({ mediaItem: value });
   },
 }));

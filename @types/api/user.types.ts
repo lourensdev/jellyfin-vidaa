@@ -17,3 +17,6 @@ export type UsersLatestItemsResponse =
 
 export type UsersItemsByTypeResponse =
   paths['/Items']['get']['responses']['200']['content']['application/json'];
+
+export type UserItemsByIdResponse =
+  paths['/Items/{itemId}']['get']['responses']['200']['content']['application/json'];

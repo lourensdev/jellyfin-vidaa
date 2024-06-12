@@ -19,15 +19,30 @@ export const handleError = (res: any) => {
   }
 };
 
+export enum ImageTypes {
+  BACKDROP = 'Backdrop',
+  PRIMARY = 'Primary',
+  LOGO = 'Logo',
+}
+
 export const getImagePath = (
   itemId: string | undefined = undefined,
   imageTag: string,
   width: number = 217,
   height: number = 326,
-  isBackdrop: boolean = false,
+  type: ImageTypes = ImageTypes.PRIMARY,
 ) => {
   const server = getCookie(SERVER_URL);
-  return `${server}/Items/${itemId}/Images/${
-    isBackdrop ? 'Backdrop' : 'Primary'
-  }?fillHeight=${height}&fillWidth=${width}&quality=96&tag=${imageTag}`;
+  return `${server}/Items/${itemId}/Images/${type}?fillHeight=${height}&fillWidth=${width}&quality=96&tag=${imageTag}`;
+};
+
+export const ticksToTime = (ticks?: number | null) => {
+  if (!ticks) return null;
+  const ticksInSeconds = ticks / 10000000;
+  // Format to time 1h 45m
+  const hours = Math.floor(ticksInSeconds / 3600);
+  const minutes = Math.floor((ticksInSeconds % 3600) / 60);
+  return `${hours !== 0 ? hours + 'h' : ''} ${
+    minutes !== 0 ? minutes + 'm' : ''
+  }`;
 };

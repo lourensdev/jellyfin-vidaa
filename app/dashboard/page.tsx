@@ -14,7 +14,7 @@ import {
 import { useEffect } from 'react';
 import { LatestItems } from '../api/users/latestItems';
 import { CollectionType } from '@/@types/collections.types';
-import { getImagePath } from '@/src/utilities/common';
+import { ImageTypes, getImagePath } from '@/src/utilities/common';
 import { ResumeItems } from '../api/users/resumeItems';
 import PageLoader from '@/src/components/pageLoader';
 import { LoaderStyle } from '@/src/components/loader';
@@ -49,7 +49,7 @@ export default function Dashboard() {
               : item.ImageTags!.Primary,
             360,
             240,
-            true,
+            ImageTypes.BACKDROP,
           ),
           progress: item.UserData?.PlayedPercentage || 0,
         }),
@@ -69,7 +69,13 @@ export default function Dashboard() {
         label: item.Name || '',
         id: item.Id || '',
         year: item.ProductionYear || null,
-        image: getImagePath(item.Id, item.ImageTags!.Primary, 240, 360, false),
+        image: getImagePath(
+          item.Id,
+          item.ImageTags!.Primary,
+          240,
+          360,
+          ImageTypes.PRIMARY,
+        ),
       }));
 
       if (view.type === CollectionType.TV_SHOWS) {
@@ -136,6 +142,7 @@ export default function Dashboard() {
                   progress={media.progress}
                   width={360}
                   height={240}
+                  path={`detail?id=${media.id}`}
                 />
               ))}
             </SliderComponent>
@@ -154,6 +161,7 @@ export default function Dashboard() {
                   hideGradientOverlay={true}
                   width={240}
                   height={360}
+                  path={`detail?id=${movie.id}`}
                 />
               ))}
             </SliderComponent>
@@ -172,6 +180,7 @@ export default function Dashboard() {
                   hideGradientOverlay={true}
                   width={240}
                   height={360}
+                  path={`detail?id=${show.id}`}
                 />
               ))}
             </SliderComponent>
