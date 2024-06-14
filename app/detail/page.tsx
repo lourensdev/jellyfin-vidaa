@@ -1,6 +1,9 @@
 'use client';
 
+import HiddenFocusComponent from '@/src/components/focusable';
 import Button, { ButtonType } from '@/src/components/form/button';
+import PersonCardComponent from '@/src/components/person';
+import { SliderComponent } from '@/src/components/slider';
 import { useApiStore } from '@/src/stores/api.store';
 import { ImageTypes, getImagePath, ticksToTime } from '@/src/utilities/common';
 import { Star } from '@material-ui/icons';
@@ -29,7 +32,11 @@ export default function Detail() {
 
   return (
     <FocusContext.Provider value={focusKey}>
-      <main ref={ref} className="flex" key={`${mediaItem?.Id}-item`}>
+      <main
+        ref={ref}
+        className="flex min-h-[100vh]"
+        key={`${mediaItem?.Id}-item`}
+      >
         <div className="absolute z-0 top-0 right-0 left-0 bottom-0">
           <div className="absolute z-10 top-0 right-0 left-0 bottom-0 bg-detail-gradient" />
           <Image
@@ -51,31 +58,37 @@ export default function Detail() {
           />
         </div>
         <div
-          className={`relative z-20 px-overscan pt-[10vh] pb-8 box-content w-full min-h-full transition-opacity ${
+          className={`relative z-20 pt-[10vh] pb-[10vh] box-content w-full min-h-[100vh] transition-opacity max-w-[100vw] ${
             logoLoaded ? 'opacity-1' : 'opacity-0'
           }`}
         >
-          <Image
-            key={`${mediaItem?.Id}-logo`}
-            src={getImagePath(
-              mediaItem?.Id,
-              mediaItem?.ImageTags?.Logo || '',
-              500,
-              500,
-              ImageTypes.LOGO,
-            )}
-            className="pb-8"
-            onLoad={() => setLogoLoaded(true)}
-            width={500}
-            height={500}
-            style={{ width: '20vw', height: 'auto' }}
-            alt="media item image"
-          />
-          <div className="lg:w-6/12 md:w-full">
-            <p className="opacity-70 text-2xl font-light pb-8">
+          <div className="pl-overscan pb-8">
+            <HiddenFocusComponent>
+              <Image
+                key={`${mediaItem?.Id}-logo`}
+                src={getImagePath(
+                  mediaItem?.Id,
+                  mediaItem?.ImageTags?.Logo || '',
+                  500,
+                  500,
+                  ImageTypes.LOGO,
+                )}
+                onLoad={() => setLogoLoaded(true)}
+                width={500}
+                height={500}
+                style={{ width: '20vw', height: 'auto' }}
+                alt="media item image"
+              />
+            </HiddenFocusComponent>
+          </div>
+          <div className="lg:w-6/12 md:w-full px-overscan">
+            <p className="opacity-70 text-2xl font-light mb-8">
+              <strong>{mediaItem?.Taglines && mediaItem?.Taglines[0]}</strong>
+            </p>
+            <p className="opacity-70 text-2xl font-light mb-8">
               {mediaItem?.Overview}
             </p>
-            <p className="opacity-70 text-2xl pb-8">
+            <p className="opacity-70 text-2xl mb-16">
               <div>
                 <strong className="flex items-center gap-1">
                   {ratings.join(' • ')}
@@ -102,7 +115,10 @@ export default function Detail() {
               </div>
             </p>
             <Button
-              label="Resume"
+              label={
+                mediaItem?.UserData?.PlayedPercentage ? 'Resume' : 'Watch Now'
+              }
+              className="mt-4"
               type={ButtonType.Primary}
               large={true}
               onEnterPress={() => console.log('watch now')}
@@ -110,6 +126,32 @@ export default function Detail() {
               disabled={false}
             />
           </div>
+          {mediaItem?.People && (
+            <>
+              <h3 className="text-2xl mt-16 mb-4 pl-overscan">Cast</h3>
+              <SliderComponent className="px-overscan">
+                {mediaItem?.People.filter(
+                  person => person.Type === 'Actor',
+                ).map(person => (
+                  <PersonCardComponent
+                    key={person.Id}
+                    name={person.Name || ''}
+                    image={getImagePath(
+                      person.Id,
+                      person.PrimaryImageTag || '',
+                      150,
+                      225,
+                      ImageTypes.PRIMARY,
+                    )}
+                    role={person.Role || null}
+                    type={person.Type || null}
+                    width={159}
+                    height={225}
+                  />
+                ))}
+              </SliderComponent>
+            </>
+          )}
         </div>
       </main>
     </FocusContext.Provider>

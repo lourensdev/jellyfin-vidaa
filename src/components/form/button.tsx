@@ -4,7 +4,7 @@ import {
   KeyPressDetails,
   useFocusable,
 } from '@noriginmedia/norigin-spatial-navigation';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Loader, { LoaderStyle } from '../loader';
 
 export enum ButtonType {
@@ -13,8 +13,9 @@ export enum ButtonType {
 }
 
 export interface ButtonProps {
-  label: string;
+  label: string | React.ReactNode;
   type: ButtonType;
+  className?: string;
   loading?: boolean;
   large?: boolean;
   disabled?: boolean;
@@ -25,6 +26,7 @@ export interface ButtonProps {
 export default function Button({
   label,
   type,
+  className,
   loading,
   large,
   disabled,
@@ -34,6 +36,16 @@ export default function Button({
   const { ref, focused } = useFocusable({
     onEnterPress,
   });
+
+  useEffect(() => {
+    if (focused) {
+      ref.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+        inline: 'center',
+      });
+    }
+  }, [ref, focused]);
 
   const buttonTypeClasses = (): string => {
     switch (type) {
@@ -57,7 +69,9 @@ export default function Button({
       className={`flex justify-center rounded-3xl ${buttonSizeClasses()} ${buttonTypeClasses()} ${
         noMinWidth ? '' : 'min-w-[200px]'
       } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
-    ${focused ? `ring-4 ring-white ring-offset-4 ring-offset-[#192F3C]` : ''}`}
+    ${
+      focused ? `ring-4 ring-white ring-offset-4 ring-offset-[#192F3C]` : ''
+    } ${className}`}
     >
       {loading ? (
         <Loader

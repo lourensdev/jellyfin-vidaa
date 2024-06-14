@@ -50,7 +50,7 @@ export default function DetailLayout({
 
   return (
     <FocusContext.Provider value={focusKey}>
-      <div ref={ref} className={`layout focused`}>
+      <div ref={ref} className={`w-[100vw] min-h-[100vh] h-full`}>
         {children}
         {isModalOpen && <ModalComponent />}
       </div>

@@ -8,11 +8,13 @@ import {
 
 interface SliderComponentProps {
   children: React.ReactElement<any>[];
+  className?: string;
   isFocused?: boolean;
 }
 
 export const SliderComponent: React.FC<SliderComponentProps> = ({
   children,
+  className,
   isFocused,
 }) => {
   const { ref, focusKey, focusSelf } = useFocusable();
@@ -25,7 +27,10 @@ export const SliderComponent: React.FC<SliderComponentProps> = ({
 
   return (
     <FocusContext.Provider value={focusKey}>
-      <div ref={ref} className="flex gap-8 overflow-x-hidden max-w-full">
+      <div
+        ref={ref}
+        className={`flex gap-8 overflow-x-hidden max-w-full ${className}`}
+      >
         {React.Children.map(children, child => {
           return React.cloneElement(child);
         })}
