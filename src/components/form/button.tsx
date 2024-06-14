@@ -21,6 +21,8 @@ export interface ButtonProps {
   disabled?: boolean;
   noMinWidth?: boolean;
   onEnterPress: (props: object, details: KeyPressDetails) => void;
+  focusBlockPosition?: string;
+  focusInlinePosition?: string;
 }
 
 export default function Button({
@@ -32,6 +34,8 @@ export default function Button({
   disabled,
   noMinWidth,
   onEnterPress,
+  focusBlockPosition = 'center',
+  focusInlinePosition = 'center',
 }: ButtonProps) {
   const { ref, focused } = useFocusable({
     onEnterPress,
@@ -41,8 +45,8 @@ export default function Button({
     if (focused) {
       ref.current.scrollIntoView({
         behavior: 'smooth',
-        block: 'center',
-        inline: 'center',
+        block: focusBlockPosition,
+        inline: focusInlinePosition,
       });
     }
   }, [ref, focused]);

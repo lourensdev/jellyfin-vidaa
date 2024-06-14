@@ -63,23 +63,21 @@ export default function Detail() {
           }`}
         >
           <div className="pl-overscan pb-8">
-            <HiddenFocusComponent>
-              <Image
-                key={`${mediaItem?.Id}-logo`}
-                src={getImagePath(
-                  mediaItem?.Id,
-                  mediaItem?.ImageTags?.Logo || '',
-                  500,
-                  500,
-                  ImageTypes.LOGO,
-                )}
-                onLoad={() => setLogoLoaded(true)}
-                width={500}
-                height={500}
-                style={{ width: '20vw', height: 'auto' }}
-                alt="media item image"
-              />
-            </HiddenFocusComponent>
+            <Image
+              key={`${mediaItem?.Id}-logo`}
+              src={getImagePath(
+                mediaItem?.Id,
+                mediaItem?.ImageTags?.Logo || '',
+                500,
+                500,
+                ImageTypes.LOGO,
+              )}
+              onLoad={() => setLogoLoaded(true)}
+              width={500}
+              height={500}
+              style={{ width: '20vw', height: 'auto' }}
+              alt="media item image"
+            />
           </div>
           <div className="lg:w-6/12 md:w-full px-overscan">
             <p className="opacity-70 text-2xl font-light mb-8">
@@ -124,6 +122,7 @@ export default function Detail() {
               onEnterPress={() => console.log('watch now')}
               loading={false}
               disabled={false}
+              focusBlockPosition="end"
             />
           </div>
           {mediaItem?.People && (
