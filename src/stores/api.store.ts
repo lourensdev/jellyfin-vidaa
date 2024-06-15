@@ -33,6 +33,8 @@ type ApiState = {
   setAllMediaByType: (value: ApiMediaItemType[]) => void;
   mediaItem: UserItemsByIdResponse | null;
   setMediaItem: (value: UserItemsByIdResponse) => void;
+  streamingId: string | null;
+  setStreamingId: (value: string) => void;
 };
 
 export const useApiStore = create<ApiState>((set, get) => ({
@@ -63,5 +65,9 @@ export const useApiStore = create<ApiState>((set, get) => ({
   mediaItem: null,
   setMediaItem: (value: UserItemsByIdResponse) => {
     set({ mediaItem: value });
+  },
+  streamingId: null,
+  setStreamingId: (value: string) => {
+    set({ streamingId: value });
   },
 }));
