@@ -12,9 +12,11 @@ import {
   FocusContext,
   useFocusable,
 } from '@noriginmedia/norigin-spatial-navigation';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function Detail() {
+  const router = useRouter();
   const { ref, focusKey, focusSelf } = useFocusable();
   const [backdropLoaded, setBackdropLoaded] = useState(false);
   const [logoLoaded, setLogoLoaded] = useState(false);
@@ -129,7 +131,7 @@ export default function Detail() {
               className="mt-4"
               type={ButtonType.Primary}
               large={true}
-              onEnterPress={() => console.log('watch now')}
+              onEnterPress={() => router.push(`/stream?id=${mediaItem?.Id}`)}
               loading={false}
               disabled={false}
               focusBlockPosition="end"
