@@ -3,16 +3,18 @@ import MillionLint from '@million/lint';
 const nextConfig = {
   reactStrictMode: false,
   experimental: {
-    missingSuspenseWithCSRBailout: false
+    missingSuspenseWithCSRBailout: false,
   },
   images: {
-    remotePatterns: [{
-      protocol: 'http',
-      hostname: '*.*.*.*',
-      pathname: '/Items/**'
-    }]
-  }
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '*',
+        pathname: '/Items/**',
+      },
+    ],
+  },
 };
 export default MillionLint.next({
-  rsc: true
+  rsc: true,
 })(nextConfig);

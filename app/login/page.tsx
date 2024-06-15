@@ -35,7 +35,9 @@ export default function LoginPage() {
   const router = useRouter();
   const { ref, focusKey, focusSelf } = useFocusable();
 
-  const [server, setServer] = useState<string>('http://192.168.1.180:8096');
+  const [server, setServer] = useState<string>(
+    'https://jellyfin-lodev-server.duckdns.org',
+  );
   const [username, setUsername] = useState<string>('lpdev');
   const [password, setPassword] = useState<string>('1234');
   const [submitting, setSubmitting] = useState<boolean>(false);
