@@ -4,7 +4,6 @@ import { useNavbar } from '@/src/hooks/useNavbar';
 import { useFocusStore } from '@/src/stores/focus.store';
 import { Movie } from '@material-ui/icons';
 import { useFocusable } from '@noriginmedia/norigin-spatial-navigation';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -109,7 +108,7 @@ export default function CardComponent(props: CardComponentProps) {
           )}
         </div>
         {!imageError ? (
-          <Image
+          <img
             src={props.image}
             alt={props.title}
             width={props.width}

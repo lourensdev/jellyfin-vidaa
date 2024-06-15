@@ -104,7 +104,7 @@ export default function Dashboard() {
         }`}
       >
         {(views === null || views.length === 0) && (
-          <PageLoader mode={LoaderStyle.Blue} size={40} />
+          <PageLoader mode={LoaderStyle.Blue} size={60} />
         )}
         {views && (
           <>

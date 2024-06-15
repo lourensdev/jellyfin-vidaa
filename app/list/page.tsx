@@ -72,7 +72,7 @@ export default function List() {
       <main ref={ref} className="flex flex-col gap-10 py-8">
         {allMediaByType === null ||
           (allMediaByType.length === 0 && (
-            <PageLoader mode={LoaderStyle.Blue} size={40} />
+            <PageLoader mode={LoaderStyle.Blue} size={60} />
           ))}
         {allMediaByType && (
           <>

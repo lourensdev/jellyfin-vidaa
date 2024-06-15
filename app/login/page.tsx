@@ -23,7 +23,6 @@ import {
 } from '@/src/constants/storage.keys';
 import { setCookie, getCookie } from 'cookies-next';
 import { UsersAuthByNameResponse } from '@/@types/api/user.types';
-import { useBackNav } from '@/src/hooks/useBackNav';
 
 init({
   debug: false,

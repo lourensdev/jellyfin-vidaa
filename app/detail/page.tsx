@@ -2,6 +2,8 @@
 
 import HiddenFocusComponent from '@/src/components/focusable';
 import Button, { ButtonType } from '@/src/components/form/button';
+import { LoaderStyle } from '@/src/components/loader';
+import PageLoader from '@/src/components/pageLoader';
 import PersonCardComponent from '@/src/components/person';
 import { SliderComponent } from '@/src/components/slider';
 import { useApiStore } from '@/src/stores/api.store';
@@ -11,7 +13,6 @@ import {
   FocusContext,
   useFocusable,
 } from '@noriginmedia/norigin-spatial-navigation';
-import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
 export default function Detail() {
@@ -23,6 +24,11 @@ export default function Detail() {
   useEffect(() => {
     focusSelf();
   }, [focusKey]);
+
+  useEffect(() => {
+    setBackdropLoaded(false);
+    setLogoLoaded(false);
+  }, [mediaItem]);
 
   const ratings: string[] = [
     mediaItem?.OfficialRating || '',
@@ -37,9 +43,14 @@ export default function Detail() {
         className="flex min-h-[100vh]"
         key={`${mediaItem?.Id}-item`}
       >
-        <div className="absolute z-0 top-0 right-0 left-0 bottom-0">
-          <div className="absolute z-10 top-0 right-0 left-0 bottom-0 bg-detail-gradient" />
-          <Image
+        {!backdropLoaded && !logoLoaded && (
+          <div className="absolute z-30 top-0 right-0 left-0 bottom-0">
+            <PageLoader mode={LoaderStyle.Blue} size={60} />
+          </div>
+        )}
+        <div className="fixed z-0 top-0 right-0 left-0 bottom-0">
+          <div className="fixed z-10 top-0 right-0 left-0 bottom-0 bg-detail-gradient" />
+          <img
             key={`${mediaItem?.Id}-backdrop`}
             src={getImagePath(
               mediaItem?.Id,
@@ -52,8 +63,7 @@ export default function Detail() {
             )}
             onLoad={() => setBackdropLoaded(true)}
             className={backdropLoaded ? 'opacity-1' : 'opacity-0'}
-            layout="fill"
-            objectFit="cover"
+            loading="lazy"
             alt={mediaItem?.Name || 'cover image'}
           />
         </div>
@@ -63,7 +73,7 @@ export default function Detail() {
           }`}
         >
           <div className="pl-overscan pb-8">
-            <Image
+            <img
               key={`${mediaItem?.Id}-logo`}
               src={getImagePath(
                 mediaItem?.Id,
@@ -76,6 +86,7 @@ export default function Detail() {
               width={500}
               height={500}
               style={{ width: '20vw', height: 'auto' }}
+              loading="lazy"
               alt="media item image"
             />
           </div>
@@ -100,7 +111,7 @@ export default function Detail() {
                   )}
                   {mediaItem?.CriticRating && (
                     <span className="flex items-center gap-1">
-                      <Image
+                      <img
                         src="/assets/tomato-rating.svg"
                         width={18}
                         height={18}
