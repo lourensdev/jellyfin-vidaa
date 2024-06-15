@@ -1,6 +1,5 @@
 'use client';
 
-import HiddenFocusComponent from '@/src/components/focusable';
 import Button, { ButtonType } from '@/src/components/form/button';
 import { LoaderStyle } from '@/src/components/loader';
 import PageLoader from '@/src/components/pageLoader';

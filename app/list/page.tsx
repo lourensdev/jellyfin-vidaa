@@ -38,7 +38,7 @@ export default function List() {
 
       const remappedViews = filterOutFolders.map(item => ({
         label: item.Name || '',
-        id: item.Id || '',
+        id: item.SeriesId || item.SeasonId || item.Id || '',
         year: item.ProductionYear || null,
         image: getImagePath(
           item.Id,
