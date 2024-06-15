@@ -58,10 +58,10 @@ export default function List() {
   };
 
   useEffect(() => {
-    if (currentView) {
+    if (currentView && views) {
       getAllMediaByType();
     }
-  }, [currentView]);
+  }, [currentView, views]);
 
   const getViewTitle = () => {
     return views?.find(view => view.type === currentView)?.label;
