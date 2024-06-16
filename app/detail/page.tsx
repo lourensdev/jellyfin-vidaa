@@ -1,5 +1,6 @@
 'use client';
 
+import ButtonIcon from '@/src/components/controls';
 import Button, { ButtonType } from '@/src/components/form/button';
 import { LoaderStyle } from '@/src/components/loader';
 import PageLoader from '@/src/components/pageLoader';
@@ -7,7 +8,7 @@ import PersonCardComponent from '@/src/components/person';
 import { SliderComponent } from '@/src/components/slider';
 import { useApiStore } from '@/src/stores/api.store';
 import { ImageTypes, getImagePath, ticksToTime } from '@/src/utilities/common';
-import { Star } from '@material-ui/icons';
+import { ArrowBack, Star } from '@material-ui/icons';
 import {
   FocusContext,
   useFocusable,
@@ -74,6 +75,11 @@ export default function Detail() {
           }`}
         >
           <div className="pl-overscan pb-8">
+            <div className="mt-[-30px] mb-[30px]">
+              <ButtonIcon onPress={() => router.back()}>
+                <ArrowBack fontSize="large" />
+              </ButtonIcon>
+            </div>
             <img
               key={`${mediaItem?.Id}-logo`}
               src={getImagePath(
@@ -91,7 +97,7 @@ export default function Detail() {
               alt="media item image"
             />
           </div>
-          <div className="lg:w-6/12 md:w-full px-overscan">
+          <div className="lg:w-8/12 md:w-full px-overscan">
             <p className="opacity-70 text-2xl font-light mb-8">
               <strong>{mediaItem?.Taglines && mediaItem?.Taglines[0]}</strong>
             </p>
@@ -133,6 +139,7 @@ export default function Detail() {
               large={true}
               onEnterPress={() => router.push(`/stream?id=${mediaItem?.Id}`)}
               loading={false}
+              isFocused={true}
               disabled={false}
               focusBlockPosition="end"
             />

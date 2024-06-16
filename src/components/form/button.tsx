@@ -19,6 +19,7 @@ export interface ButtonProps {
   loading?: boolean;
   large?: boolean;
   disabled?: boolean;
+  isFocused?: boolean;
   noMinWidth?: boolean;
   onEnterPress: (props: object, details: KeyPressDetails) => void;
   focusBlockPosition?: string;
@@ -32,14 +33,21 @@ export default function Button({
   loading,
   large,
   disabled,
+  isFocused,
   noMinWidth,
   onEnterPress,
   focusBlockPosition = 'center',
   focusInlinePosition = 'center',
 }: ButtonProps) {
-  const { ref, focused } = useFocusable({
+  const { ref, focused, focusSelf, focusKey } = useFocusable({
     onEnterPress,
   });
+
+  useEffect(() => {
+    if (isFocused) {
+      focusSelf();
+    }
+  }, [focusKey, isFocused]);
 
   useEffect(() => {
     if (focused) {

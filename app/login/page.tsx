@@ -53,7 +53,9 @@ export default function LoginPage() {
   }, [isModalOpen, focusSelf]);
 
   const submit = async () => {
-    setCookie(SERVER_URL, server);
+    setCookie(SERVER_URL, server, {
+      expires: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
+    });
     setSubmitting(true);
     const data = await AuthenticateByName(username, password);
 
@@ -61,8 +63,12 @@ export default function LoginPage() {
       setSubmitting(false);
       return;
     } else {
-      setCookie(USER_ID, (data as UsersAuthByNameResponse).User?.Id);
-      setCookie(USER_TOKEN, (data as UsersAuthByNameResponse).AccessToken);
+      setCookie(USER_ID, (data as UsersAuthByNameResponse).User?.Id, {
+        expires: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
+      });
+      setCookie(USER_TOKEN, (data as UsersAuthByNameResponse).AccessToken, {
+        expires: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
+      });
       Storage.set(USER_DATA, data);
       router.push('/dashboard');
     }
