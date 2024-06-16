@@ -91,7 +91,7 @@ export default function ListLayout({
           )}
         </div>
         <div className="content" key={activeView}>
-          {children}
+          {activeView === currentView && children}
           {isModalOpen && <ModalComponent />}
         </div>
       </div>

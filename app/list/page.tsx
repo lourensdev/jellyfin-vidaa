@@ -24,9 +24,11 @@ export default function List() {
     'view',
   ) as CollectionType;
 
-  const getAllMediaByType = () => {
+  useEffect(() => {
     setAllMediaByType([]);
+  }, []);
 
+  const getAllMediaByType = () => {
     const getAllItemsByType = async () => {
       const view = views?.find(view => view.type === currentView);
       const data = await ItemsByType(view!.label, view!.id);
