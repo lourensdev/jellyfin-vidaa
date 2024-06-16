@@ -1,18 +1,14 @@
 'use client';
 
-import ModalComponent from '@/src/components/modal';
 import {
   FocusContext,
   init,
   useFocusable,
 } from '@noriginmedia/norigin-spatial-navigation';
 import { CollectionType } from '@/@types/collections.types';
-import { useModalStore } from '@/src/stores/modal.store';
 import { useEffect } from 'react';
 import { useApiStore } from '@/src/stores/api.store';
 import { useSearchParams } from 'next/navigation';
-import { ItemDetail } from '../api/users/itemDetail';
-import { UserItemsByIdResponse } from '@/@types/api/user.types';
 import { useBackNav } from '@/src/hooks/useBackNav';
 
 init({

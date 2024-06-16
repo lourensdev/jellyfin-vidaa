@@ -39,6 +39,8 @@ export default function Stream() {
   const player = useRef<any>(null);
   const router = useRouter();
 
+  const iconStyles = { width: '50px', height: '50px' };
+
   useBackNav();
 
   useEffect(() => {
@@ -124,16 +126,18 @@ export default function Stream() {
     const currentTime = new Date();
     const videoDuration = player.current.duration;
     currentTime.setSeconds(currentTime.getSeconds() + videoDuration);
-    return currentTime.toLocaleTimeString([], {
+    const endsAtTime = currentTime.toLocaleTimeString([], {
       hour: '2-digit',
       minute: '2-digit',
     });
+
+    return endsAtTime === 'Invalid Date' ? '' : `Ends at ${endsAtTime}`;
   };
 
   const renderProgressBar = () => {
     return (
       <div className="flex items-center px-16 pb-8">
-        <div className="w-20 text-lg text-left">{getCurrentTime()}</div>
+        <div className="w-28 text-2xl text-left">{getCurrentTime()}</div>
         <div className="flex-1">
           <div className="bg-white/10 rounded-md h-2 overflow-hidden">
             <div
@@ -146,7 +150,7 @@ export default function Stream() {
             ></div>
           </div>
         </div>
-        <div className="w-20 text-lg text-right">{getTimeRemaining()}</div>
+        <div className="w-28 text-2xl text-right">{getTimeRemaining()}</div>
       </div>
     );
   };
@@ -159,31 +163,31 @@ export default function Stream() {
           onFocus={() => setControlsVisible(true)}
         >
           {playing ? (
-            <Pause fontSize="large" />
+            <Pause fontSize="large" style={iconStyles} />
           ) : (
-            <PlayArrow fontSize="large" />
+            <PlayArrow fontSize="large" style={iconStyles} />
           )}
         </ButtonIcon>
         <ButtonIcon
           onPress={() => skipBackward()}
           onFocus={() => setControlsVisible(true)}
         >
-          <Replay10 fontSize="large" />
+          <Replay10 fontSize="large" style={iconStyles} />
         </ButtonIcon>
         <ButtonIcon
           onPress={() => skipForward()}
           onFocus={() => setControlsVisible(true)}
         >
-          <Forward10 fontSize="large" />
+          <Forward10 fontSize="large" style={iconStyles} />
         </ButtonIcon>
         <ButtonIcon
           onPress={() => toggleMute()}
           onFocus={() => setControlsVisible(true)}
         >
           {muted ? (
-            <VolumeOff fontSize="large" />
+            <VolumeOff fontSize="large" style={iconStyles} />
           ) : (
-            <VolumeUp fontSize="large" />
+            <VolumeUp fontSize="large" style={iconStyles} />
           )}
         </ButtonIcon>
       </>
@@ -222,8 +226,8 @@ export default function Stream() {
           {renderProgressBar()}
           <div className="flex items-center justify-between px-16 pb-16">
             <div className="flex gap-4">{renderControls()}</div>
-            <div className="flex-grow text-right">
-              Ends at {getEndsAtTime()}
+            <div className="flex-grow text-right text-2xl">
+              {getEndsAtTime()}
             </div>
           </div>
         </div>

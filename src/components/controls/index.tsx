@@ -22,7 +22,7 @@ export default function ButtonIcon({
       className={`
         ${
           focused ? 'bg-white text-black' : 'text-white'
-        } rounded-full w-12 h-12 flex items-center justify-center`}
+        } rounded-full w-16 h-16 flex items-center justify-center`}
     >
       {children}
     </div>
