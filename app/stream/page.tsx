@@ -1,6 +1,7 @@
 'use client';
 
 import ButtonIcon from '@/src/components/controls';
+import HiddenFocusComponent from '@/src/components/focusable';
 import { LoaderStyle } from '@/src/components/loader';
 import PageLoader from '@/src/components/pageLoader';
 import {
@@ -27,9 +28,18 @@ import {
 import { getCookie } from 'cookies-next';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+import { useTimeout } from 'usehooks-ts';
 
 export default function Stream() {
-  const { ref, focusKey, focusSelf } = useFocusable();
+  const { ref, focusKey, focusSelf } = useFocusable({
+    onEnterPress: () => {
+      setControlsVisible(true);
+    },
+    onArrowPress: () => {
+      setControlsVisible(true);
+      return true;
+    },
+  });
   const [loading, setLoading] = useState(true);
   const [playing, setPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -61,6 +71,12 @@ export default function Stream() {
     };
   }, [controlsVisible]);
 
+  useEffect(() => {
+    if (!controlsVisible) {
+      focusSelf();
+    }
+  }, [controlsVisible]);
+
   const playVideo = () => {
     player.current.play();
   };
@@ -79,11 +95,11 @@ export default function Stream() {
   };
 
   const skipBackward = () => {
-    player.current.currentTime -= 100;
+    player.current.currentTime -= 10;
   };
 
   const skipForward = () => {
-    player.current.currentTime += 100;
+    player.current.currentTime += 10;
   };
 
   const toggleMute = () => {
@@ -143,9 +159,10 @@ export default function Stream() {
             <div
               className="bg-white rounded-md h-full w-full transition-transform"
               style={{
-                transform: playing
-                  ? `translateX(-${getVideoProgressPercentage()}%)`
-                  : 'translateX(-100%)',
+                transform:
+                  currentTime > 0
+                    ? `translateX(-${getVideoProgressPercentage()}%)`
+                    : 'translateX(-100%)',
               }}
             ></div>
           </div>
@@ -206,31 +223,31 @@ export default function Stream() {
             <PageLoader mode={LoaderStyle.Blue} size={60} />
           </div>
         )}
-        <div
-          className={`fixed z-20 top-0 left-0 p-16 ${
-            controlsVisible ? 'opacity-1' : 'opacity-0'
-          }`}
-        >
-          <ButtonIcon
-            onPress={() => router.back()}
-            onFocus={() => setControlsVisible(true)}
-          >
-            <ArrowBack fontSize="large" />
-          </ButtonIcon>
-        </div>
-        <div
-          className={`fixed left-0 right-0 bottom-0 z-20 transition-opacity ${
-            controlsVisible ? 'opacity-1' : 'opacity-0'
-          }`}
-        >
-          {renderProgressBar()}
-          <div className="flex items-center justify-between px-16 pb-16">
-            <div className="flex gap-4">{renderControls()}</div>
-            <div className="flex-grow text-right text-2xl">
-              {getEndsAtTime()}
+        {controlsVisible && (
+          <>
+            <div className={`fixed z-20 top-0 left-0 p-16`}>
+              <ButtonIcon
+                onPress={() => router.back()}
+                onFocus={() => setControlsVisible(true)}
+              >
+                <ArrowBack fontSize="large" />
+              </ButtonIcon>
             </div>
-          </div>
-        </div>
+            <div
+              className={`fixed left-0 right-0 bottom-0 z-20 transition-opacity`}
+            >
+              {renderProgressBar()}
+              <div className="flex items-center justify-between px-16 pb-16">
+                <HiddenFocusComponent className="flex gap-4">
+                  {renderControls()}
+                </HiddenFocusComponent>
+                <div className="flex-grow text-right text-2xl">
+                  {getEndsAtTime()}
+                </div>
+              </div>
+            </div>
+          </>
+        )}
         <video
           ref={player}
           className="w-screen h-screen"

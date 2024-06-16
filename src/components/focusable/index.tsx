@@ -1,33 +1,45 @@
 'use client';
 
-import { useFocusable } from '@noriginmedia/norigin-spatial-navigation';
+import {
+  FocusContext,
+  useFocusable,
+} from '@noriginmedia/norigin-spatial-navigation';
 import { useEffect } from 'react';
 
 export default function HiddenFocusComponent({
   children,
+  className,
+  focusPositionBlock,
+  focusPositionInline,
+  noScroll = false,
 }: {
   children: React.ReactNode;
-  focusPosition?: string;
+  className?: string;
+  focusPositionBlock?: string;
+  focusPositionInline?: string;
+  noScroll?: boolean;
 }) {
-  const { ref, focused, focusSelf } = useFocusable();
+  const { ref, focused, focusKey, focusSelf } = useFocusable();
 
   useEffect(() => {
     focusSelf();
   }, [focusSelf]);
 
   useEffect(() => {
-    if (focused) {
+    if (focused && noScroll !== true) {
       ref.current.scrollIntoView({
         behavior: 'smooth',
-        block: 'center',
-        inline: 'center',
+        block: focusPositionBlock || 'center',
+        inline: focusPositionInline || 'center',
       });
     }
   }, [ref, focused]);
 
   return (
-    <span ref={ref} className="inline-block">
-      {children}
-    </span>
+    <FocusContext.Provider value={focusKey}>
+      <span ref={ref} className={className || 'inline-block'}>
+        {children}
+      </span>
+    </FocusContext.Provider>
   );
 }
