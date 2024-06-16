@@ -1,26 +1,24 @@
 import { ErrorResponse } from '@/@types/api/generic.types';
 import { UsersLatestItemsResponse } from '@/@types/api/user.types';
-import { SERVER_URL, USER_ID, USER_TOKEN } from '@/src/constants/storage.keys';
-import { defaultHeaders, handleError } from '@/src/utilities/common';
+import { SERVER_URL, USER_ID } from '@/src/constants/storage.keys';
+import { fetcherList } from '@/src/utilities/common';
 import { getCookie } from 'cookies-next';
+import useSWR from 'swr';
 
-export async function LatestItems(
-  parentId: string,
-): Promise<UsersLatestItemsResponse | ErrorResponse> {
+export function LatestItems(parentIds: string[] | null): {
+  data: UsersLatestItemsResponse[] | ErrorResponse[] | undefined;
+  isLoading: boolean;
+} {
   const server = getCookie(SERVER_URL);
   const userId = getCookie(USER_ID);
-  const token = getCookie(USER_TOKEN);
 
-  const res = await fetch(
-    `${server}/Users/${userId}/Items/Latest?Limit=16&Fields=PrimaryImageAspectRatio%2CBasicSyncInfo%2CPath&ImageTypeLimit=1&EnableImageTypes=Primary%2CBackdrop%2CThumb&ParentId=${parentId}`,
-    {
-      method: 'GET',
-      headers: defaultHeaders(token),
-    },
-  );
+  const PATHS = parentIds
+    ? parentIds.map(
+        parentId =>
+          `${server}/Users/${userId}/Items/Latest?Limit=16&Fields=PrimaryImageAspectRatio%2CBasicSyncInfo%2CPath&ImageTypeLimit=1&EnableImageTypes=Primary%2CBackdrop%2CThumb&ParentId=${parentId}`,
+      )
+    : null;
 
-  handleError(res);
-
-  const data = await res.json();
-  return data;
+  const { data, isLoading } = useSWR(PATHS, fetcherList);
+  return { data, isLoading };
 }

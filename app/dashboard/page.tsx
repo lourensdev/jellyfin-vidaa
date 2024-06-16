@@ -11,7 +11,7 @@ import {
   FocusContext,
   useFocusable,
 } from '@noriginmedia/norigin-spatial-navigation';
-import { useEffect } from 'react';
+import { use, useEffect } from 'react';
 import { LatestItems } from '../api/users/latestItems';
 import { CollectionType } from '@/@types/collections.types';
 import { ImageTypes, getImagePath } from '@/src/utilities/common';
@@ -31,11 +31,11 @@ export default function Dashboard() {
   } = useApiStore();
   const { ref, focusKey } = useFocusable();
 
-  const getResumeMedia = () => {
-    const getResumeItems = async () => {
-      const data = await ResumeItems();
+  const { data: resumeData } = ResumeItems();
 
-      const remappedViews = (data as UsersResumeItemsResponse).Items!.map(
+  useEffect(() => {
+    if (resumeData) {
+      const remappedViews = (resumeData as UsersResumeItemsResponse).Items!.map(
         item => ({
           label: item.SeriesName
             ? `${item.SeriesName}: ${item.Name}`
@@ -56,44 +56,40 @@ export default function Dashboard() {
       );
 
       setResumeMedia(remappedViews);
-    };
+    }
+  }, [resumeData]);
 
-    getResumeItems();
-  };
-
-  const getLatestMedia = (views: ApiViewsType[]) => {
-    const getLatestItems = async (view: ApiViewsType) => {
-      const data = await LatestItems(view.id);
-
-      const remappedViews = (data as UsersLatestItemsResponse).map(item => ({
-        label: item.Name || '',
-        id: item.Id || '',
-        year: item.ProductionYear || null,
-        image: getImagePath(
-          item.Id,
-          item.ImageTags!.Primary,
-          240,
-          360,
-          ImageTypes.PRIMARY,
-        ),
-      }));
-
-      if (view.type === CollectionType.TV_SHOWS) {
-        setLatestShows(remappedViews);
-      } else {
-        setLatestMovies(remappedViews);
-      }
-    };
-
-    views.forEach(view => getLatestItems(view));
-  };
+  const { data } = LatestItems(views?.map(view => view.id) || null);
 
   useEffect(() => {
-    if (views) {
-      getResumeMedia();
-      getLatestMedia(views);
+    if (data) {
+      (data as UsersLatestItemsResponse[]).forEach(
+        (dataItem: UsersLatestItemsResponse) => {
+          const remappedViews = dataItem.map(item => ({
+            label: item.Name || '',
+            id: item.Id || '',
+            year: item.ProductionYear || null,
+            image: getImagePath(
+              item.Id,
+              item.ImageTags!.Primary,
+              240,
+              360,
+              ImageTypes.PRIMARY,
+            ),
+            type: item.Type,
+          }));
+
+          const collectionType = remappedViews[0].type;
+
+          if (collectionType === 'Series') {
+            setLatestShows(remappedViews);
+          } else if (collectionType === 'Movie') {
+            setLatestMovies(remappedViews);
+          }
+        },
+      );
     }
-  }, [views]);
+  }, [data]);
 
   return (
     <FocusContext.Provider value={focusKey}>

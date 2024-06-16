@@ -47,11 +47,10 @@ export default function ListLayout({
     checkParams();
   }, [currentView]);
 
-  useEffect(() => {
-    if (views !== null && activeView !== null) return;
-    const getViews = async () => {
-      const data = await Views();
+  const { data } = Views();
 
+  useEffect(() => {
+    if (data) {
       const remappedViews = (data as UsersViewsResponse).Items!.map(item => ({
         label: item.Name || '',
         id: item.Id || '',
@@ -59,10 +58,8 @@ export default function ListLayout({
       }));
 
       setViews(remappedViews);
-    };
-
-    getViews();
-  }, [views, activeView]);
+    }
+  }, [data]);
 
   const renderViewItems = () => {
     return views

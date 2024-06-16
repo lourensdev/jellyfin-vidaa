@@ -29,10 +29,10 @@ export default function DasbhboardLayout({
   const { isModalOpen } = useModal();
   const { views, setViews } = useApiStore();
 
-  useEffect(() => {
-    const getViews = async () => {
-      const data = await Views();
+  const { data } = Views();
 
+  useEffect(() => {
+    if (data) {
       const remappedViews = (data as UsersViewsResponse).Items!.map(item => ({
         label: item.Name || '',
         id: item.Id || '',
@@ -40,10 +40,8 @@ export default function DasbhboardLayout({
       }));
 
       setViews(remappedViews);
-    };
-
-    getViews();
-  }, []);
+    }
+  }, [data]);
 
   const renderViewItems = () => {
     return views

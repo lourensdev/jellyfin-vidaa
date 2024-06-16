@@ -28,25 +28,16 @@ export default function DetailLayout({
   const { ref, focusKey } = useFocusable();
   const params = useSearchParams();
   const mediaId: string | undefined = params.get('id') as CollectionType;
-  const { mediaItem, setMediaItem } = useApiStore();
+  const { setMediaItem } = useApiStore();
   const { isModalOpen } = useModalStore();
 
   useBackNav();
 
-  const checkParams = () => {
-    setMediaItem({});
-
-    const getItemById = async () => {
-      const data = await ItemDetail(mediaId);
-      setMediaItem(data as UserItemsByIdResponse);
-    };
-
-    getItemById();
-  };
+  const { data } = ItemDetail(mediaId);
 
   useEffect(() => {
-    checkParams();
-  }, [mediaId]);
+    setMediaItem(data as UserItemsByIdResponse);
+  }, [data]);
 
   return (
     <FocusContext.Provider value={focusKey}>

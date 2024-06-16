@@ -22,6 +22,7 @@
     "react-dom": "^18",
     "react-tv-space-navigation": "^3.6.0",
     "sass": "^1.77.2",
+    "swr": "^2.2.5",
     "usehooks-ts": "^3.1.0",
     "uuid": "^9.0.1",
     "zustand": "^4.5.1"

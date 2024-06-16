@@ -1,5 +1,33 @@
 import { getCookie } from 'cookies-next';
-import { DEVICE_ID, SERVER_URL } from '../constants/storage.keys';
+import { DEVICE_ID, SERVER_URL, USER_TOKEN } from '../constants/storage.keys';
+
+export const fetcher = async (url: string) => {
+  const token = getCookie(USER_TOKEN);
+  const res = await fetch(url, {
+    method: 'GET',
+    headers: defaultHeaders(token),
+  });
+
+  handleError(res);
+
+  const data = await res.json();
+  return data;
+};
+
+export const fetcherList = (urls: string[]) =>
+  Promise.all(
+    urls.map(url => {
+      const token = getCookie(USER_TOKEN);
+      return fetch(url, {
+        method: 'GET',
+        headers: defaultHeaders(token),
+      }).then(res => {
+        handleError(res);
+
+        return res.json();
+      });
+    }),
+  );
 
 export const defaultHeaders = (token?: string) => {
   const deviceId = getCookie(DEVICE_ID);

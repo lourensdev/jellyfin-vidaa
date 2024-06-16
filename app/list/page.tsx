@@ -28,11 +28,11 @@ export default function List() {
     setAllMediaByType([]);
   }, []);
 
-  const getAllMediaByType = () => {
-    const getAllItemsByType = async () => {
-      const view = views?.find(view => view.type === currentView);
-      const data = await ItemsByType(view!.label, view!.id);
+  const view = views?.find(view => view.type === currentView);
+  const { data } = ItemsByType(view?.label || null, view?.id || null);
 
+  useEffect(() => {
+    if (currentView && views && data) {
       const filterOutFolders = (data as UsersItemsByTypeResponse).Items!.filter(
         item =>
           view?.type === CollectionType.MOVIES ? !item.IsFolder : item.IsFolder,
@@ -54,16 +54,8 @@ export default function List() {
       }));
 
       setAllMediaByType(remappedViews);
-    };
-
-    getAllItemsByType();
-  };
-
-  useEffect(() => {
-    if (currentView && views) {
-      getAllMediaByType();
     }
-  }, [currentView, views]);
+  }, [data]);
 
   const getViewTitle = () => {
     return views?.find(view => view.type === currentView)?.label;
@@ -82,7 +74,7 @@ export default function List() {
             <GridComponent isFocused={allMediaByType.length !== 0}>
               {allMediaByType.map(movie => (
                 <CardComponent
-                  key={movie.id}
+                  key={`${movie.id}-${movie.image}`}
                   title={movie.label}
                   image={movie.image}
                   year={movie.year}
