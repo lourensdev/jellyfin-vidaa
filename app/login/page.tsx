@@ -40,6 +40,7 @@ export default function LoginPage() {
   const [username, setUsername] = useState<string>('lpdev');
   const [password, setPassword] = useState<string>('1234');
   const [submitting, setSubmitting] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!getCookie(DEVICE_ID)) {
@@ -52,17 +53,24 @@ export default function LoginPage() {
     !isModalOpen && focusSelf();
   }, [isModalOpen, focusSelf]);
 
+  const checkIfHTTPS = (url: string) => {
+    const hasHTTPS = url.startsWith('https://');
+    if (!hasHTTPS) {
+      setError('Please use HTTPS protocol');
+    } else {
+      setError(null);
+    }
+  };
+
   const submit = async () => {
+    setError(null);
     setCookie(SERVER_URL, server, {
       expires: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
     });
     setSubmitting(true);
-    const data = await AuthenticateByName(username, password);
 
-    if ('error' in data && data.error) {
-      setSubmitting(false);
-      return;
-    } else {
+    try {
+      const data = await AuthenticateByName(username, password);
       setCookie(USER_ID, (data as UsersAuthByNameResponse).User?.Id, {
         expires: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
       });
@@ -71,6 +79,12 @@ export default function LoginPage() {
       });
       Storage.set(USER_DATA, data);
       router.push('/dashboard');
+    } catch (e) {
+      console.error(e);
+      setSubmitting(false);
+      setError(
+        'Unable to login. Make sure you are using the right credentials.',
+      );
     }
   };
 
@@ -90,11 +104,19 @@ export default function LoginPage() {
             className="px-5 relative z-10 flex flex-col items-center w-full gap-6 mt-8"
             ref={ref}
           >
+            {error && (
+              <div className="bg-red-500 rounded p-4 w-full text-white">
+                {error}
+              </div>
+            )}
             <TextInput
               placeholder="Server e.g http://192.168.1.10:8096"
               large={true}
               value={server}
-              onChange={e => setServer(e)}
+              onChange={e => {
+                setServer(e);
+                e.length > 5 && checkIfHTTPS(e);
+              }}
               disabled={submitting}
             />
             <TextInput

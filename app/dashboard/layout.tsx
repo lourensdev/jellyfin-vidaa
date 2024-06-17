@@ -14,6 +14,7 @@ import { Views } from '../api/users/views';
 import { useApiStore } from '@/src/stores/api.store';
 import { UsersViewsResponse } from '@/@types/api/user.types';
 import { useModal } from '@/src/hooks/useModal';
+import { SWRConfig } from 'swr';
 
 init({
   debug: false,
@@ -52,23 +53,35 @@ export default function DasbhboardLayout({
   };
 
   return (
-    <FocusContext.Provider value={focusKey}>
-      <div ref={ref} className={`layout focused`}>
-        {views && (
-          <div className="navbar">
-            <NavBar>
-              <NavItem title="Home" type={CollectionType.HOME} active={true} />
-              <>{renderViewItems()}</>
-              <div className="flex-grow" />
-              <NavItem title="Exit" isExit={true} />
-            </NavBar>
+    <SWRConfig
+      value={{
+        onError: () => {
+          window.location.href = '/server-error';
+        },
+      }}
+    >
+      <FocusContext.Provider value={focusKey}>
+        <div ref={ref} className={`layout focused`}>
+          {views && (
+            <div className="navbar">
+              <NavBar>
+                <NavItem
+                  title="Home"
+                  type={CollectionType.HOME}
+                  active={true}
+                />
+                <>{renderViewItems()}</>
+                <div className="flex-grow" />
+                <NavItem title="Exit" isExit={true} />
+              </NavBar>
+            </div>
+          )}
+          <div className={views ? 'content' : 'w-full'}>
+            {children}
+            {isModalOpen && <ModalComponent />}
           </div>
-        )}
-        <div className={views ? 'content' : 'w-full'}>
-          {children}
-          {isModalOpen && <ModalComponent />}
         </div>
-      </div>
-    </FocusContext.Provider>
+      </FocusContext.Provider>
+    </SWRConfig>
   );
 }

@@ -14,20 +14,23 @@ export const fetcher = async (url: string) => {
   return data;
 };
 
-export const fetcherList = (urls: string[]) =>
-  Promise.all(
-    urls.map(url => {
+export const fetcherList = async (urls: string[]) => {
+  const results = await Promise.all(
+    urls.map(async url => {
       const token = getCookie(USER_TOKEN);
-      return fetch(url, {
+      const res = await fetch(url, {
         method: 'GET',
         headers: defaultHeaders(token),
-      }).then(res => {
-        handleError(res);
-
-        return res.json();
       });
+
+      handleError(res);
+
+      const data = await res.json();
+      return data;
     }),
   );
+  return results;
+};
 
 export const defaultHeaders = (token?: string) => {
   const deviceId = getCookie(DEVICE_ID);
@@ -39,11 +42,12 @@ export const defaultHeaders = (token?: string) => {
   };
 };
 
-export const handleError = (res: any) => {
+export const handleError = async (res: any) => {
   if (!res.ok) {
-    return {
-      error: res.statusText,
-    };
+    const error: any = new Error('An error occurred while fetching the data.');
+    error.info = await res.json();
+    error.status = res.status;
+    throw error;
   }
 };
 

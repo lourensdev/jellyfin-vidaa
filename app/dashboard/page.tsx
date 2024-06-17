@@ -6,14 +6,13 @@ import {
 } from '@/@types/api/user.types';
 import CardComponent from '@/src/components/card';
 import { SliderComponent } from '@/src/components/slider';
-import { ApiViewsType, useApiStore } from '@/src/stores/api.store';
+import { useApiStore } from '@/src/stores/api.store';
 import {
   FocusContext,
   useFocusable,
 } from '@noriginmedia/norigin-spatial-navigation';
-import { use, useEffect } from 'react';
+import { useEffect } from 'react';
 import { LatestItems } from '../api/users/latestItems';
-import { CollectionType } from '@/@types/collections.types';
 import { ImageTypes, getImagePath } from '@/src/utilities/common';
 import { ResumeItems } from '../api/users/resumeItems';
 import PageLoader from '@/src/components/pageLoader';
