@@ -1,5 +1,6 @@
 'use client';
 
+import { MediaSourcesType } from '@/@types/api/items.types';
 import ButtonIcon from '@/src/components/controls';
 import HiddenFocusComponent from '@/src/components/focusable';
 import { LoaderStyle } from '@/src/components/loader';
@@ -10,8 +11,11 @@ import {
   USER_TOKEN,
 } from '@/src/constants/storage.keys';
 import { useBackNav } from '@/src/hooks/useBackNav';
-import { useApiStore } from '@/src/stores/api.store';
-import { secondsToTime } from '@/src/utilities/common';
+import {
+  fetcherPost,
+  secondsToTime,
+  ticksToSeconds,
+} from '@/src/utilities/common';
 import {
   ArrowBack,
   Forward10,
@@ -28,9 +32,23 @@ import {
 import { getCookie } from 'cookies-next';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { useTimeout } from 'usehooks-ts';
+import useSWRMutation from 'swr/mutation';
+import { useInterval } from 'usehooks-ts';
+import Hls from 'hls.js';
 
-export default function Stream() {
+export default function Stream({
+  itemId,
+  mediaSources,
+  transcodeUrl,
+  playbackTicks,
+  sessionId,
+}: {
+  itemId: string | undefined;
+  mediaSources: MediaSourcesType | undefined;
+  transcodeUrl: string | null | undefined;
+  playbackTicks: string | undefined;
+  sessionId: string | null | undefined;
+}) {
   const { ref, focusKey, focusSelf } = useFocusable({
     onEnterPress: () => {
       setControlsVisible(true);
@@ -44,14 +62,71 @@ export default function Stream() {
   const [playing, setPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [controlsVisible, setControlsVisible] = useState(true);
+  const [firstStart, setFirstStart] = useState(true);
   const [muted, setMuted] = useState(false);
-  const { streamingId } = useApiStore();
   const player = useRef<any>(null);
   const router = useRouter();
 
+  const PLAYBACK_PROGRESS_STARTED = {
+    CanSeek: true,
+    ItemId: itemId,
+    IsPaused: !playing,
+    IsMuted: muted,
+    ...(playbackTicks ? { PositionTicks: parseInt(playbackTicks) } : null),
+    PlayMethod: 'Transcode',
+    RepeatMode: 'RepeatNone',
+    PlaybackOrder: 'Default',
+    PlaySessionId: sessionId,
+  };
+
+  const PLAYBACK_PROGRESS = {
+    CanSeek: true,
+    ItemId: itemId,
+    IsPaused: !playing,
+    IsMuted: muted,
+    PositionTicks: currentTime * 10000000,
+    PlayMethod: 'Transcode',
+    RepeatMode: 'RepeatNone',
+    PlaybackOrder: 'Default',
+    PlaySessionId: sessionId,
+    EventName: !playing ? 'pause' : 'timeupdate',
+  };
+
+  const PLAYBACK_PROGRESS_ENDED = {
+    CanSeek: true,
+    ItemId: itemId,
+    IsPaused: true,
+    IsMuted: muted,
+    PositionTicks: currentTime * 10000000,
+    PlayMethod: 'Transcode',
+    RepeatMode: 'RepeatNone',
+    PlaybackOrder: 'Default',
+    PlaySessionId: sessionId,
+  };
+
+  const { trigger: sessionPlaying } = useSWRMutation(
+    `/Sessions/Playing`,
+    fetcherPost,
+  );
+
+  const { trigger: sessionProgress } = useSWRMutation(
+    `/Sessions/Playing/Progress`,
+    fetcherPost,
+  );
+
+  const { trigger: sessionStopped } = useSWRMutation(
+    `/Sessions/Playing/Stopped`,
+    fetcherPost,
+  );
+
   const iconStyles = { width: '50px', height: '50px' };
 
-  useBackNav();
+  const endVideoPlayback = () => {
+    sessionStopped(PLAYBACK_PROGRESS_ENDED);
+    router.back();
+  };
+
+  useBackNav(endVideoPlayback);
 
   useEffect(() => {
     focusSelf();
@@ -76,6 +151,24 @@ export default function Stream() {
       focusSelf();
     }
   }, [controlsVisible]);
+
+  useEffect(() => {
+    if (firstStart) {
+      sessionPlaying(PLAYBACK_PROGRESS_STARTED);
+      setFirstStart(false);
+    }
+  }, [playing]);
+
+  useEffect(() => {
+    setVideoUrl();
+  }, []);
+
+  useInterval(
+    () => {
+      sessionProgress(PLAYBACK_PROGRESS);
+    },
+    playing ? 10000 : null,
+  );
 
   const playVideo = () => {
     player.current.play();
@@ -112,6 +205,15 @@ export default function Stream() {
     return secondsToTime(currentTime);
   };
 
+  const checkContinueTime = () => {
+    if (playbackTicks && firstStart) {
+      const seconds = ticksToSeconds(parseInt(playbackTicks));
+      if (seconds) {
+        player.current.currentTime = seconds;
+      }
+    }
+  };
+
   const getTimeRemaining = () => {
     if (!player.current) return '00:00:00';
     const difference = player.current.duration - currentTime;
@@ -128,11 +230,27 @@ export default function Stream() {
     return percentageInverted;
   };
 
-  const getVideoUrl = (): string => {
+  const getFormat = () => {
+    if (!mediaSources) return 'mp4';
+    return mediaSources[0].Container?.split(',')[0] || 'mp4';
+  };
+
+  const setVideoUrl = () => {
     const server = getCookie(SERVER_URL);
     const token = getCookie(USER_TOKEN);
     const deviceId = getCookie(DEVICE_ID);
-    return `${server}/Videos/${streamingId}/stream.mp4?Static=true&mediaSourceId=${streamingId}&deviceId=${deviceId}&api_key=${token}`;
+
+    if (!transcodeUrl) {
+      player.current.src = `${server}/Videos/${itemId}/stream.${getFormat()}?static=true&mediaSourceId=${itemId}&deviceId=${deviceId}&api_key=${token}`;
+      playVideo();
+    } else {
+      const hls = new Hls();
+      hls.loadSource(transcodeUrl);
+      hls.attachMedia(player.current);
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        playVideo();
+      });
+    }
   };
 
   const getEndsAtTime = () => {
@@ -216,7 +334,7 @@ export default function Stream() {
       <main
         ref={ref}
         className="flex min-h-[100vh] bg-black"
-        key={`${streamingId}-item`}
+        key={`${itemId}-item`}
       >
         {loading && (
           <div className="absolute z-30 top-0 right-0 left-0 bottom-0">
@@ -227,7 +345,7 @@ export default function Stream() {
           <>
             <div className={`fixed z-20 top-0 left-0 p-16`}>
               <ButtonIcon
-                onPress={() => router.back()}
+                onPress={endVideoPlayback}
                 onFocus={() => setControlsVisible(true)}
               >
                 <ArrowBack fontSize="large" />
@@ -251,18 +369,17 @@ export default function Stream() {
         <video
           ref={player}
           className="w-screen h-screen"
-          src={getVideoUrl()}
-          autoPlay
           onPlay={() => {
             setLoading(false);
             setPlaying(true);
+            checkContinueTime();
           }}
           onTimeUpdate={() => {
             setCurrentTime(Math.round(player.current.currentTime));
           }}
           onEnded={() => {
             setPlaying(false);
-            router.back();
+            endVideoPlayback();
           }}
         />
       </main>

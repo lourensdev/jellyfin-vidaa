@@ -8,10 +8,27 @@ export const fetcher = async (url: string) => {
     headers: defaultHeaders(token),
   });
 
-  handleError(res);
+  await handleError(res);
 
   const data = await res.json();
   return data;
+};
+
+export const fetcherPost = async (url: string, { arg }: { arg: any }) => {
+  const token = getCookie(USER_TOKEN);
+  const server = getCookie(SERVER_URL);
+  const res = await fetch(`${server}${url}`, {
+    method: 'POST',
+    headers: defaultHeaders(token),
+    body: JSON.stringify(arg),
+  });
+
+  if(res.status === 200) {
+    const data = await res.json();
+    return data;
+  } else {
+    return {};
+  }
 };
 
 export const fetcherList = async (urls: string[]) => {
@@ -23,7 +40,7 @@ export const fetcherList = async (urls: string[]) => {
         headers: defaultHeaders(token),
       });
 
-      handleError(res);
+      await handleError(res);
 
       const data = await res.json();
       return data;
@@ -77,6 +94,11 @@ export const ticksToTime = (ticks?: number | null) => {
   return `${hours !== 0 ? hours + 'h' : ''} ${
     minutes !== 0 ? minutes + 'm' : ''
   }`;
+};
+
+export const ticksToSeconds = (ticks?: number | null) => {
+  if (!ticks) return null;
+  return Math.round(ticks / 10000000);
 };
 
 /**

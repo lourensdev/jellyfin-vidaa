@@ -15,6 +15,7 @@ import { useApiStore } from '@/src/stores/api.store';
 import { UsersViewsResponse } from '@/@types/api/user.types';
 import { useModal } from '@/src/hooks/useModal';
 import { SWRConfig } from 'swr';
+import { GetDevice } from '../api/users/devices';
 
 init({
   debug: false,

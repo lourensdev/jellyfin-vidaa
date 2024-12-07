@@ -20,3 +20,6 @@ export type UsersItemsByTypeResponse =
 
 export type UserItemsByIdResponse =
   paths['/Items/{itemId}']['get']['responses']['200']['content']['application/json'];
+
+export type UserDeviceResponse =
+  paths['/Devices/Info']['get']['responses']['200']['content']['application/json'];

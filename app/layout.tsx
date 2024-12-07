@@ -17,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={roboto.className} style={{ margin: 0 }}>
+      <body className={`${roboto.className} overflow-x-hidden`} style={{ margin: 0 }}>
         <Analytics />
         {children}
       </body>

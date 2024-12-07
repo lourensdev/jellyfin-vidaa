@@ -29,7 +29,7 @@ export const SliderComponent: React.FC<SliderComponentProps> = ({
     <FocusContext.Provider value={focusKey}>
       <div
         ref={ref}
-        className={`flex gap-8 overflow-x-hidden max-w-full ${className}`}
+        className={`flex gap-8 overflow-x-scroll invisible-scrollbar max-w-full ${className}`}
       >
         {React.Children.map(children, child => {
           return React.cloneElement(child);

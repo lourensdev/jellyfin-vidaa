@@ -4,8 +4,6 @@ import { useNavbar } from '@/src/hooks/useNavbar';
 import { useFocusStore } from '@/src/stores/focus.store';
 import { Person } from '@material-ui/icons';
 import { useFocusable } from '@noriginmedia/norigin-spatial-navigation';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Person as PersonType } from '@/@types/api/generic.types';
 
@@ -61,7 +59,7 @@ export default function PersonCardComponent(props: PersonCardComponentProps) {
     >
       <div className={getWrapperClassNames()}>
         {!imageError ? (
-          <Image
+          <img
             src={props.image}
             alt={props.name}
             width={props.width}
@@ -80,10 +78,10 @@ export default function PersonCardComponent(props: PersonCardComponentProps) {
       </div>
       <div className="pt-4 text-center transition-opacity">
         <h5 className="text-md">
-          {props.name}
+          {props.name}<br />
           {props.role && (
             <div className="text-md opacity-50 inline-block pl-2">
-              {props.type === 'Actor' && 'as '} {props.role}
+              {props.type === 'Actor' || props.type === 'GuestStar' && 'as '} {props.role}
             </div>
           )}
         </h5>
