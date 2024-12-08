@@ -13,18 +13,20 @@ import {
   FocusContext,
   useFocusable,
 } from '@noriginmedia/norigin-spatial-navigation';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { ItemDetail } from '../api/users/itemDetail';
+import { CollectionType } from '@/@types/collections.types';
 
-export default function Detail({
-  mediaItem,
-}: {
-  mediaItem: UserItemsByIdResponse;
-}) {
+export default function Detail() {
   const router = useRouter();
   const { ref, focusKey, focusSelf } = useFocusable();
   const [hasNoLogo, setHasNoLogo] = useState(false);
 
+  const params = useSearchParams();
+  const mediaId: string | undefined = params.get('id') as CollectionType;
+  const { data } = ItemDetail(mediaId);
+  const mediaItem = data as UserItemsByIdResponse;  
   const hasResume = mediaItem?.UserData?.PlayedPercentage;
 
   useEffect(() => {

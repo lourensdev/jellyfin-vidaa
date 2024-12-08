@@ -202,4 +202,5 @@ class AppSettings {
   }
 }
 
-export default new AppSettings();
+const appSettings = new AppSettings();
+export default appSettings;

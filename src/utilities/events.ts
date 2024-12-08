@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export interface Event {
   type: string;
 }
@@ -22,7 +21,7 @@ function getCallbacks(obj: any, type: string): callback[] {
   return callbacks;
 }
 
-export default {
+const eventHandlers = {
   on(obj: any, type: string, fn: callback): void {
     const callbacks = getCallbacks(obj, type);
 
@@ -48,4 +47,5 @@ export default {
       });
   },
 };
-/* eslint-enable @typescript-eslint/no-explicit-any */
+
+export default eventHandlers;

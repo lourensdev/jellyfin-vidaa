@@ -42,7 +42,7 @@ export default function ServerErrorPage() {
               Unable to connect to server
             </div>{' '}
             <div className="text-2xl text-center pb-8">
-              Make sure it's online and try to reconnect. Alternatively login to
+              Make sure it&apos;s online and try to reconnect. Alternatively login to
               another server.
             </div>
             <div className="flex gap-8">

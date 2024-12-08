@@ -72,7 +72,7 @@ export function handleHlsJsMediaError(instance: any, reject: any) {
   let now = Date.now();
 
   if ((window as any).performance?.now) {
-    now = performance.now(); // eslint-disable-line compat/compat
+    now = performance.now();
   }
 
   if (!recoverDecodingErrorDate || now - recoverDecodingErrorDate > 3000) {

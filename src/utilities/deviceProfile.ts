@@ -158,7 +158,7 @@ function canPlayNativeHlsInFmp4() {
 
 function canPlayHlsWithMSE() {
   // text tracks don’t work with this in firefox
-  return window.MediaSource != null; /* eslint-disable-line compat/compat */
+  return window.MediaSource != null;
 }
 
 function supportsAc3(videoTestElement: HTMLVideoElement) {
@@ -341,7 +341,7 @@ function supportsVc1(videoTestElement: HTMLVideoElement) {
 function supportsDolbyVision(options: any) {
   return (
     options.supportsDolbyVision ??
-    (false || // eslint-disable-line sonarjs/no-redundant-boolean
+    (false ||
       (browser.safari &&
         ((browser.iOS && browser.iOSVersion >= 13) || browser.osx)))
   );
@@ -478,7 +478,7 @@ function getSpeakerCount() {
   const AudioContext =
     window.AudioContext ||
     (window as any).webkitAudioContext ||
-    false; /* eslint-disable-line compat/compat */
+    false;
 
   if (AudioContext) {
     const audioCtx = new AudioContext();
@@ -620,10 +620,8 @@ function profileBuilder(videoTestElement: HTMLVideoElement, options: any) {
     }
   }
 
-  /* eslint-disable compat/compat */
   let maxVideoWidth = browser.xboxOne ? window.screen?.width : null;
 
-  /* eslint-enable compat/compat */
   if (options.maxVideoWidth) {
     maxVideoWidth = options.maxVideoWidth;
   }

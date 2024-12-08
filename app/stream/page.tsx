@@ -1,6 +1,6 @@
 'use client';
 
-import { MediaSourcesType } from '@/@types/api/items.types';
+import { MediaSourceInfo, PlaybackMediaInfoResponseType } from '@/@types/api/items.types';
 import ButtonIcon from '@/src/components/controls';
 import HiddenFocusComponent from '@/src/components/focusable';
 import { LoaderStyle } from '@/src/components/loader';
@@ -8,6 +8,7 @@ import PageLoader from '@/src/components/pageLoader';
 import {
   DEVICE_ID,
   SERVER_URL,
+  USER_ID,
   USER_TOKEN,
 } from '@/src/constants/storage.keys';
 import { useBackNav } from '@/src/hooks/useBackNav';
@@ -30,25 +31,15 @@ import {
   useFocusable,
 } from '@noriginmedia/norigin-spatial-navigation';
 import { getCookie } from 'cookies-next';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import useSWRMutation from 'swr/mutation';
 import { useInterval } from 'usehooks-ts';
 import Hls from 'hls.js';
+import { CollectionType } from '@/@types/collections.types';
+import getDeviceProfile, { Profile } from '@/src/utilities/deviceProfile';
 
-export default function Stream({
-  itemId,
-  mediaSources,
-  transcodeUrl,
-  playbackTicks,
-  sessionId,
-}: {
-  itemId: string | undefined;
-  mediaSources: MediaSourcesType | undefined;
-  transcodeUrl: string | null | undefined;
-  playbackTicks: string | undefined;
-  sessionId: string | null | undefined;
-}) {
+export default function Stream() {
   const { ref, focusKey, focusSelf } = useFocusable({
     onEnterPress: () => {
       setControlsVisible(true);
@@ -67,9 +58,23 @@ export default function Stream({
   const player = useRef<any>(null);
   const router = useRouter();
 
+  const params = useSearchParams();
+  const streamId: string | undefined = params.get('id') as CollectionType;
+  const playbackTicks: string | undefined = params.get('ticks') as CollectionType;
+
+  const userId = getCookie(USER_ID);
+
+  const PATH = `/Items/${streamId}/PlaybackInfo?UserId=${userId}&StartTimeTicks=0&IsPlayback=true&AutoOpenLiveStream=true&MaxStreamingBitrate=140000000`;
+
+  const { data, trigger } = useSWRMutation(PATH, fetcherPost);
+
+  const sessionId = (data as unknown as PlaybackMediaInfoResponseType)?.PlaySessionId;
+  const mediaSources: MediaSourceInfo[] | undefined = (data as unknown as PlaybackMediaInfoResponseType)?.MediaSources;
+  const transcodeUrl = mediaSources && mediaSources[0].SupportsDirectStream ? mediaSources[0].TranscodingUrl : null;
+
   const PLAYBACK_PROGRESS_STARTED = {
     CanSeek: true,
-    ItemId: itemId,
+    ItemId: streamId,
     IsPaused: !playing,
     IsMuted: muted,
     ...(playbackTicks ? { PositionTicks: parseInt(playbackTicks) } : null),
@@ -81,7 +86,7 @@ export default function Stream({
 
   const PLAYBACK_PROGRESS = {
     CanSeek: true,
-    ItemId: itemId,
+    ItemId: streamId,
     IsPaused: !playing,
     IsMuted: muted,
     PositionTicks: currentTime * 10000000,
@@ -94,7 +99,7 @@ export default function Stream({
 
   const PLAYBACK_PROGRESS_ENDED = {
     CanSeek: true,
-    ItemId: itemId,
+    ItemId: streamId,
     IsPaused: true,
     IsMuted: muted,
     PositionTicks: currentTime * 10000000,
@@ -125,6 +130,14 @@ export default function Stream({
     sessionStopped(PLAYBACK_PROGRESS_ENDED);
     router.back();
   };
+
+  useEffect(() => {
+    if (window !== undefined) {
+      getDeviceProfile(document.createElement('video')).then(
+        (profile: Profile) => trigger({ DeviceProfile: profile }),
+      );
+    }
+  }, []);
 
   useBackNav(endVideoPlayback);
 
@@ -241,7 +254,7 @@ export default function Stream({
     const deviceId = getCookie(DEVICE_ID);
 
     if (!transcodeUrl) {
-      player.current.src = `${server}/Videos/${itemId}/stream.${getFormat()}?static=true&mediaSourceId=${itemId}&deviceId=${deviceId}&api_key=${token}`;
+      player.current.src = `${server}/Videos/${streamId}/stream.${getFormat()}?static=true&mediaSourceId=${streamId}&deviceId=${deviceId}&api_key=${token}`;
       playVideo();
     } else {
       const hls = new Hls();
@@ -334,7 +347,7 @@ export default function Stream({
       <main
         ref={ref}
         className="flex min-h-[100vh] bg-black"
-        key={`${itemId}-item`}
+        key={`${streamId}-item`}
       >
         {loading && (
           <div className="absolute z-30 top-0 right-0 left-0 bottom-0">
